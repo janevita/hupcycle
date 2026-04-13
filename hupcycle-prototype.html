@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HUPcycle — From Waste to Wearable Stories</title>
+  <style>
+    :root {
+      --ink:        #1C1915;
+      --ink-mid:    #4A4440;
+      --ink-light:  #8C837A;
+      --bg:         #F4F0E8;
+      --bg-warm:    #EDE8DC;
+      --bg-white:   #FDFAF5;
+      --green:      #2A5C45;
+      --green-deep: #1A3D2E;
+      --green-pale: #C5D9CB;
+      --orange:     #E8652A;
+      --orange-pale:#F5E0D5;
+      --sand:       #DDD5C0;
+      --teal:       #1E4D4A;
+      --r:          4px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg); color: var(--ink);
+      font-size: 16px; line-height: 1.6;
+    }
+    h1,h2,h3,.serif {
+      font-family: Georgia,'Times New Roman',serif;
+      font-weight: normal; line-height: 1.15; letter-spacing: -0.02em;
+    }
+    .label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-light);
+    }
+    .section-rule {
+      display: flex; align-items: center; gap: 16px; margin-bottom: 40px;
+    }
+    .section-rule::after { content:''; flex:1; height:1px; background:var(--sand); }
+
+    /* ── SECTIONS ── */
+    .section { display: none; }
+    .section.active { display: block; animation: fi .22s ease; }
+    @keyframes fi { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 200;
+      background: var(--bg-white); border-bottom: 1px solid var(--sand);
+      padding: 0 56px; height: 56px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: Georgia,serif; font-size: 19px; color: var(--ink);
+      cursor: pointer; letter-spacing: -0.04em; flex-shrink: 0;
+    }
+    .nav-logo span { color: var(--orange); }
+    .nav-links {
+      display: flex; align-items: center;
+    }
+    .nav-links a {
+      padding: 0 13px; height: 56px; display: flex; align-items: center;
+      font-size: 13px; font-weight: 500; color: var(--ink-mid);
+      text-decoration: none; border-bottom: 2px solid transparent;
+      cursor: pointer; transition: color .15s, border-color .15s; white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-links a.active { color: var(--ink); border-bottom-color: var(--orange); }
+    .nav-cta {
+      margin-left: 10px; padding: 7px 16px !important; height:auto !important;
+      background: var(--green) !important; color: white !important;
+      border-radius: var(--r) !important; border-bottom:none !important; font-weight:600 !important;
+    }
+    .nav-cta:hover { background: var(--green-deep) !important; color:white !important; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; background: none; border: none; padding: 8px;
+    }
+    .hamburger span { width: 22px; height: 2px; background: var(--ink); display: block; transition: all .2s; }
+    .hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+    /* Mobile nav overlay */
+    .mobile-nav {
+      display: none; position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
+      background: var(--bg-white); z-index: 190;
+      flex-direction: column; padding: 24px;
+      overflow-y: auto; border-top: 1px solid var(--sand);
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      display: block; padding: 16px 0; font-size: 22px; font-family: Georgia,serif;
+      color: var(--ink); text-decoration: none; cursor: pointer;
+      border-bottom: 1px solid var(--sand);
+    }
+    .mobile-nav a:last-child { border-bottom: none; }
+    .mobile-nav a.nav-cta-m {
+      margin-top: 16px; background: var(--green); color: white;
+      padding: 16px; border-radius: var(--r); border-bottom: none; text-align: center;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 22px; border-radius: var(--r);
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      transition: all .15s; border: none; font-family: inherit;
+    }
+    .btn-primary { background: var(--green); color: white; }
+    .btn-primary:hover { background: var(--green-deep); }
+    .btn-ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--sand); }
+    .btn-ghost:hover { border-color: var(--ink-light); }
+    .btn-orange { background: var(--orange); color: white; }
+    .btn-orange:hover { background: #c9541f; }
+    .tlink {
+      font-size: 13px; font-weight: 600; color: var(--green);
+      background: none; border: none; cursor: pointer;
+      text-decoration: underline; text-underline-offset: 3px;
+    }
+    .tlink:hover { color: var(--green-deep); }
+
+    /* ── PHOTO HELPERS ── */
+    .photo-cover {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+      display: block;
+    }
+    .photo-frame {
+      overflow: hidden; position: relative;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink); color: rgba(255,255,255,.45);
+      padding: 40px 56px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 32px; align-items: end;
+    }
+    footer .f-brand { font-family: Georgia,serif; font-size: 20px; color: white; margin-bottom: 6px; }
+    footer p { font-size: 13px; line-height: 1.5; }
+    .f-links { display: flex; gap: 24px; align-items: center; }
+    .f-links a { font-size: 13px; color: rgba(255,255,255,.45); text-decoration: none; cursor: pointer; }
+    .f-links a:hover { color: white; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: var(--ink); color: white;
+      padding: 10px 22px; border-radius: var(--r);
+      font-size: 13px; font-weight: 500;
+      transition: transform .25s ease;
+      pointer-events: none; z-index: 9999;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ═══════ HOME ═══════ */
+    .hero {
+      display: grid; grid-template-columns: 1.1fr .9fr;
+      min-height: calc(100vh - 56px);
+    }
+    .hero-left {
+      padding: 80px 56px 64px; background: var(--bg-white);
+      display: flex; flex-direction: column; justify-content: space-between;
+      border-right: 1px solid var(--sand);
+    }
+    .hero-eyebrow {
+      font-size: 11px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--green); margin-bottom: 28px;
+    }
+    .hero-h1 {
+      font-family: Georgia,serif;
+      font-size: clamp(44px,5.5vw,72px);
+      line-height: 1.06; letter-spacing: -.03em; margin-bottom: 28px;
+    }
+    .hero-h1 em { font-style: normal; color: var(--orange); }
+    .hero-body { font-size: 17px; line-height: 1.7; color: var(--ink-mid); max-width: 480px; margin-bottom: 40px; }
+    .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .hero-nums { padding-top: 40px; border-top: 1px solid var(--sand); margin-top: 48px; display: flex; gap: 48px; }
+    .hero-num .n { font-family: Georgia,serif; font-size: 36px; color: var(--ink); line-height: 1; }
+    .hero-num .l { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--ink-light); margin-top: 5px; }
+
+    /* Hero right — photo panel */
+    .hero-right {
+      position: relative; overflow: hidden; background: var(--green-deep);
+      display: flex; flex-direction: column; justify-content: flex-end;
+    }
+    .hero-right img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: center;
+    }
+    .hero-right-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(26,61,46,.92) 0%, rgba(26,61,46,.45) 60%, rgba(26,61,46,.2) 100%);
+    }
+    .hero-right-content { position: relative; z-index: 1; padding: 48px 56px; }
+    .stream-hed { font-family: Georgia,serif; font-size: 18px; color: white; font-weight: normal; margin-bottom: 20px; }
+    .stream-bar { display: flex; height: 44px; border-radius: var(--r); overflow: hidden; margin-bottom: 16px; }
+    .sb { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: white; }
+    .stream-cols { display: grid; grid-template-columns: 1fr 1fr 1fr .7fr; gap: 6px; }
+    .sc { padding: 10px; border-radius: var(--r); background: rgba(255,255,255,.07); }
+    .sc.highlighted { background: rgba(232,101,42,.2); border: 1px solid rgba(232,101,42,.3); }
+    .sc .pct { font-family: Georgia,serif; font-size: 20px; color: white; line-height: 1; }
+    .sc.highlighted .pct { color: #FF9F75; }
+    .sc .nm { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.45); margin-top: 3px; display: block; }
+    .sc .ds { font-size: 11px; color: rgba(255,255,255,.55); line-height: 1.4; margin-top: 3px; }
+    .hero-source { font-size: 11px; color: rgba(255,255,255,.28); letter-spacing: .04em; border-top: 1px solid rgba(255,255,255,.1); padding-top: 16px; margin-top: 20px; }
+
+    /* Platform rows */
+    .plat-head { padding: 56px 56px 28px; }
+    .plat-list { border-top: 1px solid var(--sand); }
+    .plat-row {
+      display: grid; grid-template-columns: 180px 1fr 24px;
+      align-items: start; gap: 40px; padding: 30px 56px;
+      border-bottom: 1px solid var(--sand); cursor: pointer; transition: background .14s;
+    }
+    .plat-row:hover { background: var(--bg-warm); }
+    .plat-num { font-size: 12px; font-weight: 700; color: var(--ink-light); letter-spacing: .06em; padding-top: 3px; }
+    .plat-row h3 { font-size: 22px; margin-bottom: 7px; }
+    .plat-row p { font-size: 14px; color: var(--ink-mid); line-height: 1.55; max-width: 580px; }
+    .plat-arrow { color: var(--ink-light); padding-top: 3px; font-size: 16px; }
+
+    /* Community preview strip on homepage */
+    .community-strip {
+      background: var(--green-deep); padding: 56px;
+      display: grid; grid-template-columns: 280px 1fr; gap: 56px;
+    }
+    .cs-left h3 { font-size: 32px; color: white; margin-bottom: 12px; }
+    .cs-left p { font-size: 15px; color: rgba(255,255,255,.65); line-height: 1.65; margin-bottom: 24px; }
+    .event-list { display: flex; flex-direction: column; gap: 0; }
+    .event-item {
+      display: grid; grid-template-columns: 60px 1fr;
+      gap: 16px; padding: 18px 0; border-top: 1px solid rgba(255,255,255,.1);
+      align-items: center;
+    }
+    .event-date { font-family: Georgia,serif; text-align: center; }
+    .event-date .d { font-size: 24px; color: white; line-height: 1; }
+    .event-date .m { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.4); }
+    .event-info h4 { font-size: 15px; color: white; margin-bottom: 3px; }
+    .event-info .loc { font-size: 12px; color: rgba(255,255,255,.5); }
+    .cs-photos { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 8px; }
+    .cs-photo { overflow: hidden; border-radius: var(--r); }
+    .cs-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .3s; }
+    .cs-photo:hover img { transform: scale(1.04); }
+
+    /* ═══════ MATERIALS ═══════ */
+    .pg-intro { padding: 72px 56px 48px; }
+    .pg-intro h2 { font-size: clamp(36px,4vw,52px); margin-bottom: 14px; }
+    .pg-intro .sub { font-size: 17px; color: var(--ink-mid); max-width: 580px; line-height: 1.65; }
+
+    /* Tier grid with photo for Seconds */
+    .tier-wrap { margin: 0 56px 56px; }
+    .tier-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border: 1px solid var(--sand); }
+    .tier-col { padding: 36px; border-right: 1px solid var(--sand); }
+    .tier-col:last-child { border-right: none; }
+    .tier-col.featured { padding: 0; overflow: hidden; position: relative; }
+    .tier-photo { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; min-height: 320px; }
+    .tier-featured-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(232,101,42,.92) 0%, rgba(232,101,42,.4) 60%);
+      display: flex; flex-direction: column; justify-content: flex-end; padding: 32px;
+    }
+    .tier-tag-pill {
+      display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; padding: 3px 9px; border-radius: 2px; margin-bottom: 14px;
+    }
+    .tier-col .pct-big { font-family: Georgia,serif; font-size: 56px; line-height: 1; margin-bottom: 10px; color: var(--ink); }
+    .tier-col h3 { font-size: 20px; margin-bottom: 10px; }
+    .tier-col p { font-size: 14px; color: var(--ink-mid); line-height: 1.55; }
+
+    /* LSJH partner strip */
+    .lsjh-strip {
+      margin: 0 56px 56px; background: var(--green-deep); color: white;
+      padding: 40px 48px; display: grid; grid-template-columns: 1fr auto; gap: 40px; align-items: center;
+    }
+    .lsjh-strip h3 { font-size: 22px; color: white; margin-bottom: 10px; }
+    .lsjh-strip p { font-size: 14px; color: rgba(255,255,255,.68); line-height: 1.6; max-width: 540px; }
+    .lsjh-stats { display: flex; gap: 40px; flex-shrink: 0; }
+    .ls { text-align: center; }
+    .ls .n { font-family: Georgia,serif; font-size: 32px; color: white; }
+    .ls .l { font-size: 11px; text-transform: uppercase; letter-spacing: .07em; color: rgba(255,255,255,.4); margin-top: 3px; }
+
+    /* Material table */
+    .mat-section { padding: 0 56px 80px; }
+    .mat-table { width: 100%; border-collapse: collapse; }
+    .mat-table thead tr { border-bottom: 2px solid var(--ink); }
+    .mat-table th { font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-light); padding: 0 14px 12px 0; text-align: left; }
+    .mat-table th:last-child { text-align: right; }
+    .mat-table tbody tr { border-bottom: 1px solid var(--sand); cursor: pointer; transition: background .12s; }
+    .mat-table tbody tr:hover { background: var(--bg-warm); }
+    .mat-table td { padding: 18px 14px 18px 0; font-size: 14px; vertical-align: middle; }
+    .mat-table td:last-child { text-align: right; }
+    .mat-thumb { width: 52px; height: 40px; border-radius: var(--r); overflow: hidden; flex-shrink: 0; }
+    .mat-thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .m-cell-inner { display: flex; align-items: center; gap: 12px; }
+    .m-name-cell { font-family: Georgia,serif; font-size: 16px; color: var(--ink); }
+    .m-source { font-size: 12px; color: var(--ink-light); margin-top: 2px; }
+    .grade-s { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+    .gdot { width: 7px; height: 7px; border-radius: 50%; }
+    .gdot-o { background: var(--orange); }
+    .gdot-g { background: var(--green); }
+    .avail-p { display: inline-block; padding: 2px 9px; border-radius: 2px; font-size: 11px; font-weight: 700; background: var(--green-pale); color: var(--green); }
+    .avail-p.soon { background: var(--orange-pale); color: var(--orange); }
+
+    /* ═══════ MAKERS ═══════ */
+    .process-strip { background: var(--bg-warm); border-top: 1px solid var(--sand); border-bottom: 1px solid var(--sand); padding: 48px 56px; }
+    .process-strip .strip-hed { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 32px; }
+    .process-steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; }
+    .p-step { padding-right: 32px; border-right: 1px solid var(--sand); }
+    .p-step:last-child { border-right: none; padding-right: 0; }
+    .p-step:not(:first-child) { padding-left: 32px; }
+    .p-letter { font-family: Georgia,serif; font-size: 44px; color: var(--sand); line-height: 1; margin-bottom: 12px; }
+    .p-step h4 { font-size: 15px; font-family: Georgia,serif; margin-bottom: 7px; }
+    .p-step p { font-size: 13px; color: var(--ink-mid); line-height: 1.55; }
+
+    /* Collab features */
+    .collab-feature { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--sand); min-height: 460px; }
+    .collab-visual { overflow: hidden; position: relative; min-height: 380px; }
+    .collab-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .collab-visual .cv-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(28,33,50,.88) 0%, rgba(28,33,50,.2) 70%);
+    }
+    .cv-content { position: absolute; bottom: 0; left: 0; right: 0; padding: 36px 40px; }
+    .cv-runline { font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 10px; }
+    .cv-title { font-family: Georgia,serif; font-size: 36px; color: white; line-height: 1.1; margin-bottom: 8px; }
+    .cv-sub { font-size: 13px; color: rgba(255,255,255,.5); line-height: 1.5; }
+    .cv-press { display: inline-block; margin-top: 12px; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.25); }
+    .collab-info { padding: 56px; display: flex; flex-direction: column; justify-content: center; border-left: 1px solid var(--sand); }
+    .collab-info .cat { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); margin-bottom: 14px; }
+    .collab-info h3 { font-size: 38px; margin-bottom: 6px; }
+    .collab-info .loc { font-size: 13px; color: var(--ink-light); margin-bottom: 20px; }
+    .collab-info p { font-size: 15px; color: var(--ink-mid); line-height: 1.65; margin-bottom: 14px; }
+    .works-line { font-size: 13px; font-weight: 600; color: var(--ink); padding-top: 16px; border-top: 1px solid var(--sand); margin-bottom: 24px; }
+
+    /* Creator dashboard (app-mockup inspired) */
+    .creator-section { padding: 64px 56px; background: var(--bg-white); border-top: 1px solid var(--sand); }
+    .creator-section > .section-rule { margin-bottom: 40px; }
+    .creator-dashboard {
+      display: grid; grid-template-columns: 300px 1fr; gap: 32px;
+    }
+    .creator-card {
+      background: var(--bg); border: 1px solid var(--sand); border-radius: var(--r);
+      overflow: hidden;
+    }
+    .creator-card-cover { height: 100px; overflow: hidden; }
+    .creator-card-cover img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+    .creator-card-body { padding: 0 24px 24px; margin-top: -28px; }
+    .creator-av {
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 3px solid var(--bg-white); overflow: hidden;
+      margin-bottom: 10px; background: var(--green);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .creator-av img { width: 100%; height: 100%; object-fit: cover; }
+    .creator-av .av-text { font-family: Georgia,serif; font-size: 20px; color: white; }
+    .creator-card-body h4 { font-family: Georgia,serif; font-size: 20px; margin-bottom: 2px; }
+    .creator-card-body .ch { font-size: 12px; color: var(--orange); font-weight: 600; margin-bottom: 14px; }
+    .creator-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+    .c-stat { text-align: center; padding: 8px 4px; background: var(--bg-warm); border-radius: 2px; }
+    .c-stat .v { font-family: Georgia,serif; font-size: 18px; color: var(--green); }
+    .c-stat .l { font-size: 10px; color: var(--ink-light); text-transform: uppercase; letter-spacing: .06em; }
+    .creator-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 16px; }
+    .ctag { padding: 3px 9px; border: 1px solid var(--sand); border-radius: 2px; font-size: 11px; font-weight: 500; color: var(--ink-mid); background: var(--bg-white); }
+
+    /* Creator workspace tabs */
+    .creator-workspace {}
+    .tab-bar {
+      display: flex; border-bottom: 1px solid var(--sand); margin-bottom: 28px;
+    }
+    .tab-btn {
+      padding: 10px 20px; font-size: 13px; font-weight: 600; background: none;
+      border: none; border-bottom: 2px solid transparent;
+      cursor: pointer; color: var(--ink-mid); transition: all .15s;
+    }
+    .tab-btn.active { color: var(--ink); border-bottom-color: var(--orange); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* Creator material grid */
+    .mat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
+    .mat-item {
+      border: 1px solid var(--sand); border-radius: var(--r); overflow: hidden;
+      background: var(--bg-white); cursor: pointer; transition: transform .15s;
+    }
+    .mat-item:hover { transform: translateY(-2px); }
+    .mat-item-img { height: 100px; overflow: hidden; }
+    .mat-item-img img { width: 100%; height: 100%; object-fit: cover; }
+    .mat-item-body { padding: 10px 12px; }
+    .mat-item-body h5 { font-family: Georgia,serif; font-size: 14px; margin-bottom: 3px; }
+    .mat-item-body .kg { font-size: 12px; color: var(--green); font-weight: 700; }
+    .mat-item-body .src { font-size: 11px; color: var(--ink-light); }
+
+    /* Creator designs grid */
+    .designs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px,1fr)); gap: 12px; }
+    .design-item { border: 1px solid var(--sand); border-radius: var(--r); overflow: hidden; background: var(--bg-white); cursor: pointer; transition: transform .15s; }
+    .design-item:hover { transform: translateY(-2px); }
+    .design-img { height: 200px; overflow: hidden; }
+    .design-img img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .design-body { padding: 10px 12px; }
+    .design-body h5 { font-family: Georgia,serif; font-size: 14px; margin-bottom: 3px; }
+    .design-body .dp { font-size: 14px; font-weight: 700; font-family: Georgia,serif; }
+    .design-body .dm { font-size: 11px; color: var(--orange); font-weight: 600; }
+
+    /* Challenges */
+    .chal-section { background: var(--bg-warm); border-top: 1px solid var(--sand); border-bottom: 1px solid var(--sand); padding: 56px; }
+    .chal-section h3 { font-size: 26px; margin-bottom: 28px; }
+    .chal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+    .chal-item { padding-bottom: 24px; border-bottom: 1px solid var(--sand); }
+    .chal-item:nth-last-child(-n+2) { border-bottom: none; padding-bottom: 0; }
+    .chal-item strong { font-size: 15px; display: block; margin-bottom: 5px; color: var(--ink); }
+    .chal-item p { font-size: 14px; color: var(--ink-mid); line-height: 1.55; }
+    .arrow-o { color: var(--orange); font-weight: 700; margin-right: 4px; }
+
+    /* Maker list */
+    .maker-list { padding: 56px; }
+    .maker-list-row { display: grid; grid-template-columns: 240px 1fr auto; align-items: center; gap: 32px; padding: 22px 0; border-bottom: 1px solid var(--sand); cursor: pointer; transition: background .12s; }
+    .maker-list-row:hover { background: var(--bg-warm); padding: 22px 16px; margin: 0 -16px; }
+    .ml-ident { display: flex; align-items: center; gap: 14px; }
+    .ml-av { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: white; font-family: Georgia,serif; flex-shrink: 0; }
+    .ml-name { font-family: Georgia,serif; font-size: 17px; }
+    .ml-loc { font-size: 12px; color: var(--ink-light); margin-top: 1px; }
+    .ml-tags { display: flex; gap: 7px; flex-wrap: wrap; }
+    .tpill { padding: 3px 9px; background: var(--bg); border: 1px solid var(--sand); border-radius: 2px; font-size: 12px; color: var(--ink-mid); }
+    .ml-stat { text-align: right; }
+    .ml-stat .v { font-family: Georgia,serif; font-size: 20px; color: var(--green); }
+    .ml-stat .l { font-size: 11px; color: var(--ink-light); }
+
+    /* ═══════ PRODUCTS ═══════ */
+    .ba-section { padding: 56px; border-top: 1px solid var(--sand); margin-top: 48px; }
+    .ba-section .ba-hed { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 36px; }
+    .ba-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; }
+    .ba-visual-wrap { display: grid; grid-template-columns: 1fr 20px 1fr; height: 200px; margin-bottom: 14px; }
+    .ba-b { overflow: hidden; border-radius: var(--r) 0 0 var(--r); filter: saturate(.25) brightness(.8); }
+    .ba-b img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .ba-arrow-col { background: var(--orange); display: flex; align-items: center; justify-content: center; color: white; font-size: 10px; font-weight: 800; }
+    .ba-a { overflow: hidden; border-radius: 0 var(--r) var(--r) 0; }
+    .ba-a img { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
+    .ba-maker { font-size: 11px; font-weight: 700; color: var(--orange); letter-spacing: .05em; text-transform: uppercase; margin-bottom: 4px; }
+    .ba-name { font-family: Georgia,serif; font-size: 18px; margin-bottom: 5px; }
+    .ba-desc { font-size: 13px; color: var(--ink-mid); line-height: 1.5; }
+    .ba-price { font-family: Georgia,serif; font-size: 20px; margin-top: 10px; }
+
+    /* Product grid with photos */
+    .prod-grid-section { padding: 0 56px 56px; }
+    .prod-grid-section .prod-hed { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-light); margin-bottom: 24px; }
+    .prod-photo-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+    .prod-card { border: 1px solid var(--sand); border-radius: var(--r); overflow: hidden; background: var(--bg-white); cursor: pointer; transition: transform .15s; }
+    .prod-card:hover { transform: translateY(-3px); }
+    .prod-card-img { height: 260px; overflow: hidden; }
+    .prod-card-img img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: transform .3s; }
+    .prod-card:hover .prod-card-img img { transform: scale(1.04); }
+    .prod-card-body { padding: 14px 16px; }
+    .prod-card-body .pcm { font-size: 11px; font-weight: 700; color: var(--orange); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 3px; }
+    .prod-card-body h4 { font-family: Georgia,serif; font-size: 15px; margin-bottom: 6px; }
+    .prod-card-footer { display: flex; justify-content: space-between; align-items: center; }
+    .prod-card-footer .price { font-family: Georgia,serif; font-size: 17px; }
+    .prod-card-footer .eco { font-size: 11px; color: var(--green); font-weight: 700; }
+
+    /* Market strip */
+    .mkt-strip { background: var(--bg-warm); border-top: 1px solid var(--sand); border-bottom: 1px solid var(--sand); padding: 48px 56px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; }
+    .mkt-item .big { font-family: Georgia,serif; font-size: 40px; color: var(--orange); line-height: 1; }
+    .mkt-item .desc { font-size: 14px; color: var(--ink-mid); line-height: 1.55; margin-top: 8px; }
+
+    /* ═══════ TECHNOLOGY ═══════ */
+    .tech-needs { border-top: 1px solid var(--sand); }
+    .tn-row { display: grid; grid-template-columns: 240px 1fr; border-bottom: 1px solid var(--sand); }
+    .tn-label { padding: 40px 40px 40px 56px; border-right: 1px solid var(--sand); display: flex; flex-direction: column; justify-content: center; }
+    .tn-label .n { font-family: Georgia,serif; font-size: 36px; color: var(--green); line-height: 1; margin-bottom: 6px; }
+    .tn-label .l { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-light); }
+    .tn-body { padding: 40px 56px; }
+    .tn-body h3 { font-size: 22px; margin-bottom: 10px; }
+    .tn-body p { font-size: 15px; color: var(--ink-mid); line-height: 1.6; max-width: 540px; }
+    .tn-ref { display: block; margin-top: 12px; font-size: 12px; font-weight: 600; color: var(--ink-light); letter-spacing: .04em; }
+    .eco-section { background: var(--green-deep); color: white; padding: 64px 56px; }
+    .eco-section .eco-hed { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 32px; }
+    .eco-flow { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.1); }
+    .eco-node { background: var(--green-deep); padding: 28px 24px; }
+    .eco-node .nl { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 10px; }
+    .eco-node h4 { font-family: Georgia,serif; font-size: 18px; color: white; margin-bottom: 10px; }
+    .eco-node ul { list-style: none; }
+    .eco-node ul li { font-size: 13px; color: rgba(255,255,255,.55); padding: 3px 0; }
+    .eco-node ul li::before { content:'— '; color: var(--orange); }
+    .rev-row { display: flex; border-top: 1px solid rgba(255,255,255,.1); margin-top: 40px; }
+    .rev-item { flex: 1; padding: 24px; border-right: 1px solid rgba(255,255,255,.1); }
+    .rev-item:last-child { border-right: none; }
+    .rev-item .rl { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.32); margin-bottom: 7px; }
+    .rev-item .rn { font-family: Georgia,serif; font-size: 16px; color: white; margin-bottom: 4px; }
+    .rev-item .rd { font-size: 12px; color: rgba(255,255,255,.45); }
+
+    /* ═══════ PARTNER ═══════ */
+    .partner-hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 500px; }
+    .ph-left { padding: 80px 56px; background: var(--ink); color: white; display: flex; flex-direction: column; justify-content: space-between; }
+    .ph-left h2 { font-size: clamp(36px,4vw,52px); color: white; margin-bottom: 18px; }
+    .ph-left p { font-size: 16px; color: rgba(255,255,255,.65); line-height: 1.65; max-width: 400px; }
+    .ph-contact { padding-top: 32px; border-top: 1px solid rgba(255,255,255,.1); }
+    .ph-contact .cn { font-family: Georgia,serif; font-size: 18px; color: white; }
+    .ph-contact .ce { font-size: 13px; color: rgba(255,255,255,.45); margin-top: 5px; }
+    .ph-right { padding: 80px 56px; background: var(--orange); color: white; }
+    /* Partner warehouse photo strip */
+    .ph-warehouse {
+      position: relative; overflow: hidden; min-height: 280px;
+      grid-column: 1 / -1;
+    }
+    .ph-warehouse img {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      object-fit: cover; object-position: center 60%;
+    }
+    .ph-warehouse-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, rgba(28,25,21,.75) 0%, rgba(28,25,21,.2) 60%, rgba(28,25,21,.05) 100%);
+    }
+    .ph-warehouse-content {
+      position: relative; z-index: 1; padding: 56px;
+      display: flex; flex-direction: column; justify-content: flex-end; height: 100%;
+    }
+    .ph-right h3 { font-size: 20px; color: white; margin-bottom: 28px; }
+    .mkt-row { padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,.18); }
+    .mkt-row:last-child { border-bottom: none; }
+    .mkt-row .val { font-family: Georgia,serif; font-size: 38px; color: white; line-height: 1; }
+    .mkt-row .desc { font-size: 14px; color: rgba(255,255,255,.72); line-height: 1.4; margin-top: 4px; }
+    .pt-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border-top: 1px solid var(--sand); border-left: 1px solid var(--sand); }
+    .pt-col { border-right: 1px solid var(--sand); border-bottom: 1px solid var(--sand); padding: 40px; }
+    .pt-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--green); margin-bottom: 14px; }
+    .pt-col h3 { font-size: 24px; margin-bottom: 10px; }
+    .pt-col p { font-size: 14px; color: var(--ink-mid); line-height: 1.6; }
+    .form-section { padding: 72px 56px; max-width: 680px; }
+    .form-section h3 { font-size: 32px; margin-bottom: 10px; }
+    .form-section .form-sub { font-size: 16px; color: var(--ink-mid); margin-bottom: 36px; line-height: 1.6; }
+    .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    .ffield { display: flex; flex-direction: column; gap: 6px; }
+    .ffield label { font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--ink-light); }
+    .ffield input,.ffield select,.ffield textarea { padding: 10px 13px; border: 1.5px solid var(--sand); border-radius: var(--r); font-size: 14px; font-family: inherit; background: var(--bg-white); color: var(--ink); outline: none; transition: border-color .15s; }
+    .ffield input:focus,.ffield select:focus,.ffield textarea:focus { border-color: var(--green); }
+    .ffield textarea { resize: vertical; min-height: 100px; }
+    .frow-full { grid-column: 1/-1; }
+
+    /* ═══════ RESPONSIVE ═══════ */
+    @media (max-width: 860px) {
+      nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .hero,.collab-feature,.partner-hero { grid-template-columns: 1fr; }
+      .hero-left { padding: 48px 24px 40px; }
+      .hero-right { min-height: 380px; }
+      .hero-right-content { padding: 28px 24px; }
+      .hero-nums { gap: 24px; }
+
+      .pg-intro,.plat-head,.maker-list,.mat-section,
+      .ba-section,.prod-grid-section,.chal-section,
+      .form-section,.eco-section,.mkt-strip,
+      .creator-section { padding: 40px 24px; }
+
+      .lsjh-strip,.tier-wrap { margin: 0 24px 40px; }
+      .lsjh-strip { grid-template-columns: 1fr; }
+      .tier-grid { grid-template-columns: 1fr; }
+      .tier-col { border-right: none; border-bottom: 1px solid var(--sand); }
+      .tier-col.featured .tier-photo { min-height: 220px; }
+
+      .process-steps { grid-template-columns: 1fr 1fr; gap: 24px; }
+      .p-step { border-right: none !important; padding: 0 !important; }
+
+      .ba-grid,.mkt-strip { grid-template-columns: 1fr; }
+      .prod-photo-grid { grid-template-columns: 1fr 1fr; }
+
+      .tn-row { grid-template-columns: 1fr; }
+      .tn-label { padding: 28px 24px; border-right: none; border-bottom: 1px solid var(--sand); }
+      .tn-body { padding: 24px; }
+
+      .eco-flow { grid-template-columns: 1fr 1fr; }
+      .rev-row { flex-wrap: wrap; }
+
+      .pt-grid { grid-template-columns: 1fr; }
+      .frow { grid-template-columns: 1fr; }
+
+      .ph-warehouse { min-height: 220px; }
+      .ph-warehouse-content { padding: 32px 24px; }
+      footer { grid-template-columns: 1fr; padding: 32px 24px; }
+      .f-links { flex-wrap: wrap; gap: 16px; }
+
+      .plat-row { grid-template-columns: 1fr; padding: 24px; gap: 10px; }
+      .maker-list-row { grid-template-columns: 1fr; gap: 10px; }
+      .community-strip { grid-template-columns: 1fr; padding: 40px 24px; }
+      .cs-photos { grid-template-rows: 120px 120px; }
+      .creator-dashboard { grid-template-columns: 1fr; }
+      .collab-visual { min-height: 280px; }
+      .collab-info { padding: 36px 24px; border-left: none; border-top: 1px solid var(--sand); }
+      .process-strip { padding: 40px 24px; }
+      .mat-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-logo" onclick="show('home')">HUP<span>cycle</span></div>
+  <div class="nav-links" id="navLinks">
+    <a onclick="show('home')" class="active" id="nav-home">Overview</a>
+    <a onclick="show('materials')" id="nav-materials">Materials</a>
+    <a onclick="show('makers')" id="nav-makers">Makers</a>
+    <a onclick="show('products')" id="nav-products">Products</a>
+    <a onclick="show('technology')" id="nav-technology">Technology</a>
+    <a onclick="show('partner')" id="nav-partner" class="nav-cta">Partner with us</a>
+  </div>
+  <button class="hamburger" id="ham" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- Mobile nav overlay -->
+<div class="mobile-nav" id="mobileNav">
+  <a onclick="show('home');closeMenu()">Overview</a>
+  <a onclick="show('materials');closeMenu()">Materials</a>
+  <a onclick="show('makers');closeMenu()">Makers</a>
+  <a onclick="show('products');closeMenu()">Products</a>
+  <a onclick="show('technology');closeMenu()">Technology</a>
+  <a onclick="show('partner');closeMenu()" class="nav-cta-m">Partner with us</a>
+</div>
+
+<!-- ═══════════════ HOME ═══════════════ -->
+<div id="home" class="section active">
+
+  <div class="hero">
+    <div class="hero-left">
+      <div>
+        <div class="hero-eyebrow">Finland's National Textile Upcycling Hub · Helsinki · 2026</div>
+        <h1 class="hero-h1">From waste<br>to <em>wearable</em><br>stories</h1>
+        <p class="hero-body">HUPcycle builds the infrastructure, market, and maker ecosystem to turn Finland's most overlooked textile stream — Seconds — into a competitive and creative industry.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" onclick="show('materials')">Explore materials</button>
+          <button class="btn btn-ghost" onclick="show('partner')">Become a partner</button>
+        </div>
+      </div>
+      <div class="hero-nums">
+        <div class="hero-num"><div class="n">40+</div><div class="l">Upcyclers<br>collaborated</div></div>
+        <div class="hero-num"><div class="n">95%</div><div class="l">National collection<br>coverage</div></div>
+        <div class="hero-num"><div class="n">3×</div><div class="l">Faster than<br>apparel market</div></div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <img src="img/denim-bales.jpeg" alt="Denim bales at LSJH sorting facility" />
+      <div class="hero-right-overlay"></div>
+      <div class="hero-right-content">
+        <div class="stream-hed">The post-consumer textile stream</div>
+        <div class="stream-bar">
+          <div class="sb" style="width:13%;background:#4A9B6F;">10–15%</div>
+          <div class="sb" style="width:35%;background:var(--orange);">30–40%</div>
+          <div class="sb" style="width:32%;background:#2E7A6A;">30–35%</div>
+          <div class="sb" style="width:20%;background:#5A5550;">~20%</div>
+        </div>
+        <div class="stream-cols">
+          <div class="sc"><div class="pct">10–15%</div><span class="nm">Reuse</span><div class="ds">Good condition, resold directly</div></div>
+          <div class="sc highlighted"><div class="pct">30–40%</div><span class="nm" style="color:rgba(255,159,117,.7);">Seconds ←</span><div class="ds" style="color:rgba(255,255,255,.75);">Refurbish &amp; remake. HUPcycle's focus.</div></div>
+          <div class="sc"><div class="pct">30–35%</div><span class="nm">Recycling</span><div class="ds">End-of-life processing</div></div>
+          <div class="sc"><div class="pct">~20%</div><span class="nm">Contaminated</span><div class="ds">Unsalvageable</div></div>
+        </div>
+        <div class="hero-source">Source: LSJH tExtended webinar, 1.4.2026 · Miira Ojanen</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Platform rows -->
+  <div class="plat-head"><div class="section-rule"><span class="label">Platform</span></div></div>
+  <div class="plat-list">
+    <div class="plat-row" onclick="show('materials')">
+      <div class="plat-num">01 — Materials</div>
+      <div><h3>Material Bank</h3><p>Verified Seconds feedstock from LSJH's nationwide collection network. Remake feedstock trades at €2,000–10,000/tn — up to 10× the value of standard recycling streams at €10–600/tn.</p></div>
+      <div class="plat-arrow">→</div>
+    </div>
+    <div class="plat-row" onclick="show('makers')">
+      <div class="plat-num">02 — Makers</div>
+      <div><h3>Maker & Creator Hub</h3><p>Real collaborations: Rolf Ekroth's Encore SS26 at Copenhagen Fashion Week. Ervin Latimer's blouses and home textiles. 40+ upcyclers with a simple four-step onboarding process.</p></div>
+      <div class="plat-arrow">→</div>
+    </div>
+    <div class="plat-row" onclick="show('products')">
+      <div class="plat-num">03 — Products</div>
+      <div><h3>Content-First Marketplace</h3><p>Every product carries a before/after transformation story and material provenance. Unique, made-to-order pieces for a market growing 3× faster than overall apparel.</p></div>
+      <div class="plat-arrow">→</div>
+    </div>
+    <div class="plat-row" onclick="show('technology')">
+      <div class="plat-num">04 — Technology</div>
+      <div><h3>AI Sorting & Scale Infrastructure</h3><p>AI-assisted fibre identification, robotic sorting, and digital product passports aligned with EU EPR/ESPR requirements entering force in 2026.</p></div>
+      <div class="plat-arrow">→</div>
+    </div>
+  </div>
+
+  <!-- Community strip -->
+  <div class="community-strip">
+    <div class="cs-left">
+      <h3>Community & Events</h3>
+      <p>Workshops, pop-up markets, and the annual HUP Summit — building a movement around "From Waste to Runway."</p>
+      <button class="btn btn-ghost" style="color:white;border-color:rgba(255,255,255,.3);" onclick="show('makers')">Meet the makers →</button>
+      <div class="event-list">
+        <div class="event-item">
+          <div class="event-date"><div class="d">8</div><div class="m">Jun</div></div>
+          <div class="event-info"><h4>HUP Summit 2026</h4><div class="loc">Helsinki · ARKI 135</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-date"><div class="d">22</div><div class="m">May</div></div>
+          <div class="event-info"><h4>Workshop: Denim Rework</h4><div class="loc">Helsinki · Lemppari Store</div></div>
+        </div>
+        <div class="event-item">
+          <div class="event-date"><div class="d">14</div><div class="m">Jun</div></div>
+          <div class="event-info"><h4>Pop-up Market · From Waste to Runway</h4><div class="loc">Turku · LSJH Facility</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="cs-photos">
+      <div class="cs-photo"><img src="img/workshop.jpeg" alt="HUPcycle upcycling workshop" /></div>
+      <div class="cs-photo"><img src="img/fashion-1.jpeg" alt="Upcycled fashion output" /></div>
+      <div class="cs-photo"><img src="img/fashion-2.jpeg" alt="Remake garment" /></div>
+      <div class="cs-photo"><img src="img/lace-seconds.jpeg" alt="Seconds textile material" /></div>
+    </div>
+  </div>
+
+  <footer>
+    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Supported by ARKI 135 · Helsinki · 2026</p></div>
+    <div class="f-links"><a onclick="show('materials')">Materials</a><a onclick="show('makers')">Makers</a><a onclick="show('products')">Products</a><a onclick="show('partner')">Partner</a></div>
+  </footer>
+</div>
+
+<!-- ═══════════════ MATERIALS ═══════════════ -->
+<div id="materials" class="section">
+  <div class="pg-intro">
+    <div class="section-rule"><span class="label">Material Bank</span></div>
+    <h2>Seconds: the stream<br>nobody talks about</h2>
+    <p class="sub">30–40% of collected Finnish textiles are "Seconds" — too worn for direct reuse, too valuable to shred. HUPcycle routes this stream to designers and makers who can refurbish and remake it into high-value products.</p>
+  </div>
+
+  <div class="tier-wrap">
+    <div class="tier-grid">
+      <div class="tier-col">
+        <span class="tier-tag-pill" style="background:var(--green-pale);color:var(--green);">Tier A</span>
+        <div class="pct-big">10–15%</div>
+        <h3>Reuse</h3>
+        <div style="margin:14px 0 16px;height:140px;overflow:hidden;border-radius:var(--r);">
+          <img src="img/reuse-dress.jpeg" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;" alt="Reuse-grade garments" />
+        </div>
+        <p>Good-condition clothing resold as-is via Lemppari store. High value per unit, limited volume.</p>
+      </div>
+      <div class="tier-col featured">
+        <img src="img/lace-seconds.jpeg" alt="Seconds lace textile material" class="tier-photo" />
+        <div class="tier-featured-overlay">
+          <span class="tier-tag-pill" style="background:rgba(255,255,255,.22);color:white;">Tier B — HUPcycle focus</span>
+          <div style="font-family:Georgia,serif;font-size:52px;color:white;line-height:1;margin-bottom:8px;">30–40%</div>
+          <div style="font-size:20px;font-family:Georgia,serif;color:white;margin-bottom:10px;">Seconds</div>
+          <p style="font-size:14px;color:rgba(255,255,255,.8);line-height:1.5;">Soiled, worn, imperfect — but valuable. Remake feedstock commands €2,000–10,000/tn. The untapped opportunity.</p>
+        </div>
+      </div>
+      <div class="tier-col">
+        <span class="tier-tag-pill" style="background:var(--bg-warm);color:var(--ink-light);">Tier C</span>
+        <div class="pct-big">30–35%</div>
+        <h3>Recycling</h3>
+        <p>End-of-life at €10–600/tn. Mechanical or chemical processing. HUPcycle intercepts upstream before this stage.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="lsjh-strip">
+    <div>
+      <h3>Supply Partner: LSJH</h3>
+      <p>Länsi-Suomen Jätehuolto (LSJH) — Finland's pioneer municipal waste management company for post-consumer textiles — provides HUPcycle with a reliable, large-volume Seconds feedstock with 95% national coverage. The same stream that supplied Rolf Ekroth's Copenhagen Fashion Week collection.</p>
+    </div>
+    <div class="lsjh-stats">
+      <div class="ls"><div class="n">95%</div><div class="l">FI coverage</div></div>
+      <div class="ls"><div class="n">5+</div><div class="l">Regional hubs</div></div>
+    </div>
+  </div>
+
+  <div class="mat-section">
+    <div class="section-rule"><span class="label">Available feedstock</span></div>
+    <table class="mat-table">
+      <thead>
+        <tr>
+          <th style="width:260px">Material</th>
+          <th>Fibre</th><th>Volume</th><th>Grade</th><th>Price / tn</th><th>Status</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <div class="m-cell-inner">
+              <div class="mat-thumb"><img src="img/denim-bales.jpeg" alt="Denim" /></div>
+              <div><div class="m-name-cell">Denim Deadstock</div><div class="m-source">LSJH Turku Hub</div></div>
+            </div>
+          </td>
+          <td>98% Cotton</td><td>1,200 kg</td>
+          <td><span class="grade-s"><span class="gdot gdot-o"></span>Seconds</span></td>
+          <td style="font-family:Georgia,serif;font-size:15px;">€900</td>
+          <td><span class="avail-p soon">Apr 28</span></td>
+          <td><button class="tlink" onclick="toast('Batch reserved.')">Reserve →</button></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="m-cell-inner">
+              <div class="mat-thumb"><img src="img/lace-seconds.jpeg" alt="Lace" /></div>
+              <div><div class="m-name-cell">Mixed Cotton Blend</div><div class="m-source">LSJH Helsinki Hub</div></div>
+            </div>
+          </td>
+          <td>Cotton/Poly</td><td>840 kg</td>
+          <td><span class="grade-s"><span class="gdot gdot-o"></span>Seconds</span></td>
+          <td style="font-family:Georgia,serif;font-size:15px;">€1,200</td>
+          <td><span class="avail-p">Ready</span></td>
+          <td><button class="tlink" onclick="toast('Sample inquiry sent.')">Request →</button></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="m-cell-inner">
+              <div class="mat-thumb"><img src="img/ervin-garment.jpeg" alt="Wool" /></div>
+              <div><div class="m-name-cell">Merino Wool Off-cuts</div><div class="m-source">Tampere Textile Factory</div></div>
+            </div>
+          </td>
+          <td>100% Wool</td><td>320 kg</td>
+          <td><span class="grade-s"><span class="gdot gdot-g"></span>B-grade</span></td>
+          <td style="font-family:Georgia,serif;font-size:15px;">€3,800</td>
+          <td><span class="avail-p">Ready</span></td>
+          <td><button class="tlink" onclick="toast('Sample inquiry sent.')">Request →</button></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="m-cell-inner">
+              <div class="mat-thumb"><img src="img/warehouse-1.jpeg" alt="Mixed textiles" /></div>
+              <div><div class="m-name-cell">Mixed Household Textiles</div><div class="m-source">ARKI 135 Lab</div></div>
+            </div>
+          </td>
+          <td>Mixed fibres</td><td>560 kg</td>
+          <td><span class="grade-s"><span class="gdot gdot-o"></span>Seconds</span></td>
+          <td style="font-family:Georgia,serif;font-size:15px;">€600</td>
+          <td><span class="avail-p">Ready</span></td>
+          <td><button class="tlink" onclick="toast('Sample inquiry sent.')">Request →</button></td>
+        </tr>
+        <tr>
+          <td>
+            <div class="m-cell-inner">
+              <div class="mat-thumb"><img src="img/clothes-rack.jpeg" alt="Linen surplus" /></div>
+              <div><div class="m-name-cell">Linen Surplus</div><div class="m-source">Espoo Collection Point</div></div>
+            </div>
+          </td>
+          <td>Linen blend</td><td>410 kg</td>
+          <td><span class="grade-s"><span class="gdot gdot-g"></span>B-grade</span></td>
+          <td style="font-family:Georgia,serif;font-size:15px;">€2,500</td>
+          <td><span class="avail-p">Ready</span></td>
+          <td><button class="tlink" onclick="toast('Sample inquiry sent.')">Request →</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Supported by ARKI 135 · Helsinki · 2026</p></div>
+    <div class="f-links"><a onclick="show('home')">Overview</a><a onclick="show('makers')">Makers</a><a onclick="show('products')">Products</a><a onclick="show('partner')">Partner</a></div>
+  </footer>
+</div>
+
+<!-- ═══════════════ MAKERS ═══════════════ -->
+<div id="makers" class="section">
+  <div class="pg-intro">
+    <div class="section-rule"><span class="label">Maker & SME Hub</span></div>
+    <h2>40+ upcyclers.<br>One reliable supply.</h2>
+    <p class="sub">LSJH's upcycling service connects designers, seamsters, and textile artists directly to vetted Seconds feedstock — saving hours of sourcing and unlocking one-of-a-kind collections that generate real media attention.</p>
+  </div>
+
+  <div class="process-strip">
+    <div class="strip-hed">Maker onboarding — four steps</div>
+    <div class="process-steps">
+      <div class="p-step"><div class="p-letter">a.</div><h4>Inquiry call</h4><p>Specification discussion: what fibre types, volumes, and conditions suit the maker's practice.</p></div>
+      <div class="p-step"><div class="p-letter">b.</div><h4>Test sorting</h4><p>A test batch is prepared — confirming there is enough of the right feedstock to sustain production needs.</p></div>
+      <div class="p-step"><div class="p-letter">c.</div><h4>Facility visit</h4><p>Designer visits the LSJH facility: inspection and creative inspiration from the full material stream in person.</p></div>
+      <div class="p-step"><div class="p-letter">d.</div><h4>Supply contract</h4><p>Continuous supply agreement including permission for social media content using the Seconds origin story.</p></div>
+    </div>
+  </div>
+
+  <!-- Rolf Ekroth -->
+  <div style="padding:56px 56px 0;background:var(--bg-white);"><div class="section-rule"><span class="label">Featured collaborations</span></div></div>
+
+  <div class="collab-feature">
+    <div class="collab-visual">
+      <img src="img/rolf-runway-grid.jpeg" alt="Rolf Ekroth Encore SS26 — Vogue Scandinavia" />
+      <div class="cv-overlay"></div>
+      <div class="cv-content">
+        <div class="cv-runline">Copenhagen Fashion Week · August 2025</div>
+        <div class="cv-title">Encore SS26</div>
+        <div class="cv-sub">Post-consumer textiles, dead stock &amp; "running stock" fabrics</div>
+        <div class="cv-press">Featured in Vogue Scandinavia</div>
+      </div>
+    </div>
+    <div class="collab-info">
+      <div class="cat">Collaboration — Active</div>
+      <h3>Rolf Ekroth</h3>
+      <div class="loc">Helsinki · rolfekroth.com</div>
+      <p>Finnish fashion designer Rolf Ekroth sourced post-consumer textiles, dead stock, and "running stock" fabrics from LSJH's Seconds stream for his Encore collection — shown at Copenhagen Fashion Week in August 2025 and featured in Vogue Scandinavia.</p>
+      <p>After visiting the LSJH material facility, Ekroth found high-quality wool and mixed fabrics he used directly in his collection. High-fashion output from Seconds material is an existing track record, not a future promise.</p>
+      <div class="works-line">Works with: Seconds wool · Deadstock denim · Mixed post-consumer</div>
+      <button class="btn btn-ghost" style="align-self:flex-start;" onclick="show('products')">View in marketplace →</button>
+    </div>
+  </div>
+
+  <div class="collab-feature">
+    <div class="collab-info" style="border-right:1px solid var(--sand);">
+      <div class="cat">Collaboration — Active</div>
+      <h3>Ervin Latimer</h3>
+      <div class="loc">Helsinki · ervinlatimer.fi</div>
+      <p>Ervin Latimer creates blouses, sheets, and poster-print pieces from post-consumer textiles and dead stock fabrics sourced through LSJH. His work spans womenswear and home textiles — demonstrating the product breadth Seconds material can serve.</p>
+      <div class="works-line">Works with: Post-consumer cotton · Dead stock linen · Surplus sheeting</div>
+      <button class="btn btn-ghost" style="align-self:flex-start;" onclick="show('products')">View in marketplace →</button>
+    </div>
+    <div class="collab-visual">
+      <img src="img/ervin-portrait.jpeg" alt="Ervin Latimer" />
+      <div class="cv-overlay" style="background:linear-gradient(to top,rgba(42,31,24,.88) 0%,rgba(42,31,24,.2) 70%)"></div>
+      <div class="cv-content">
+        <div class="cv-runline">Helsinki · 2024–2026</div>
+        <div class="cv-title">Blouses, sheets &amp; poster prints</div>
+        <div class="cv-sub">From post-consumer textiles &amp; dead stock fabrics</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Creator Dashboard -->
+  <div class="creator-section">
+    <div class="section-rule"><span class="label">Creator workspace</span></div>
+    <div class="creator-dashboard">
+      <!-- Profile card -->
+      <div class="creator-card">
+        <div class="creator-card-cover"><img src="img/rolf-runway-grid.jpeg" alt="cover" /></div>
+        <div class="creator-card-body">
+          <div class="creator-av"><div class="av-text">MK</div></div>
+          <h4>Meri Korhonen</h4>
+          <div class="ch">@meri.upcycles · Helsinki</div>
+          <div class="creator-stats">
+            <div class="c-stat"><div class="v">320 kg</div><div class="l">Upcycled</div></div>
+            <div class="c-stat"><div class="v">48</div><div class="l">Products</div></div>
+            <div class="c-stat"><div class="v">4.9★</div><div class="l">Rating</div></div>
+          </div>
+          <div class="creator-tags">
+            <span class="ctag">Womenswear</span>
+            <span class="ctag">Denim rework</span>
+            <span class="ctag">Zero-waste</span>
+            <span class="ctag">Slow fashion</span>
+          </div>
+          <div style="background:var(--green-pale);border-radius:2px;padding:10px 12px;font-size:13px;color:var(--green);margin-bottom:14px;">320 kg textile waste diverted from landfill</div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="toast('Following Meri Korhonen!')">Follow creator</button>
+        </div>
+      </div>
+
+      <!-- Tabs workspace -->
+      <div class="creator-workspace">
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="switchTab(this,'tab-materials')">Materials available</button>
+          <button class="tab-btn" onclick="switchTab(this,'tab-designs')">My designs</button>
+          <button class="tab-btn" onclick="switchTab(this,'tab-collabs')">Collaborations</button>
+        </div>
+
+        <div id="tab-materials" class="tab-content active">
+          <div style="font-size:13px;color:var(--ink-mid);margin-bottom:20px;">Seconds feedstock matched to your practice — Cotton, Denim, Mixed fibres.</div>
+          <div class="mat-grid">
+            <div class="mat-item">
+              <div class="mat-item-img"><img src="img/denim-bales.jpeg" alt="Denim" /></div>
+              <div class="mat-item-body"><h5>Denim Deadstock</h5><div class="kg">1,200 kg available</div><div class="src">LSJH Turku</div></div>
+            </div>
+            <div class="mat-item">
+              <div class="mat-item-img"><img src="img/lace-seconds.jpeg" alt="Cotton blend" /></div>
+              <div class="mat-item-body"><h5>Cotton Blend Mix</h5><div class="kg">840 kg available</div><div class="src">LSJH Helsinki</div></div>
+            </div>
+            <div class="mat-item">
+              <div class="mat-item-img"><img src="img/warehouse-1.jpeg" alt="Mixed household" /></div>
+              <div class="mat-item-body"><h5>Household Textiles</h5><div class="kg">560 kg available</div><div class="src">ARKI 135</div></div>
+            </div>
+            <div class="mat-item">
+              <div class="mat-item-img"><img src="img/clothes-rack-color.jpeg" alt="Mixed colour" /></div>
+              <div class="mat-item-body"><h5>Mixed Seconds</h5><div class="kg">280 kg available</div><div class="src">LSJH Oulu</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-designs" class="tab-content">
+          <div style="font-size:13px;color:var(--ink-mid);margin-bottom:20px;">Published designs — from your Seconds material sources.</div>
+          <div class="designs-grid">
+            <div class="design-item">
+              <div class="design-img"><img src="img/fashion-2.jpeg" alt="Denim dress" /></div>
+              <div class="design-body"><div class="dm">Rolf Ekroth · Encore SS26</div><h5>Denim Dungaree Dress</h5><div class="dp">€210</div></div>
+            </div>
+            <div class="design-item">
+              <div class="design-img"><img src="img/fashion-1.jpeg" alt="Patterned piece" /></div>
+              <div class="design-body"><div class="dm">Meri Korhonen</div><h5>Patchwork Jacket</h5><div class="dp">€145</div></div>
+            </div>
+            <div class="design-item">
+              <div class="design-img"><img src="img/fashion-3.jpeg" alt="Tote bag" /></div>
+              <div class="design-body"><div class="dm">Studio Kierrätys</div><h5>Mixed Fibre Tote</h5><div class="dp">€68</div></div>
+            </div>
+            <div class="design-item">
+              <div class="design-img"><img src="img/fashion-4.jpeg" alt="White dress" /></div>
+              <div class="design-body"><div class="dm">Ervin Latimer</div><h5>Linen Blouse</h5><div class="dp">€145</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="tab-collabs" class="tab-content">
+          <div style="font-size:13px;color:var(--ink-mid);margin-bottom:20px;">Active supply partnerships and joint collection agreements.</div>
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <div style="display:grid;grid-template-columns:180px 1fr auto;align-items:center;gap:24px;padding:20px 0;border-bottom:1px solid var(--sand);">
+              <div style="font-family:Georgia,serif;font-size:16px;">LSJH</div>
+              <div style="font-size:14px;color:var(--ink-mid);">Continuous Seconds supply · Denim + Cotton · Helsinki & Turku hubs</div>
+              <span class="avail-p">Active</span>
+            </div>
+            <div style="display:grid;grid-template-columns:180px 1fr auto;align-items:center;gap:24px;padding:20px 0;border-bottom:1px solid var(--sand);">
+              <div style="font-family:Georgia,serif;font-size:16px;">Arktinen Lab</div>
+              <div style="font-size:14px;color:var(--ink-mid);">Shared manufacturing capacity · Wool outerwear · Tampere</div>
+              <span class="avail-p">Active</span>
+            </div>
+            <div style="display:grid;grid-template-columns:180px 1fr auto;align-items:center;gap:24px;padding:20px 0;">
+              <div style="font-family:Georgia,serif;font-size:16px;">ARKI 135</div>
+              <div style="font-size:14px;color:var(--ink-mid);">Innovation Lab access · Workshop space · Helsinki</div>
+              <span class="avail-p">Active</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Challenges -->
+  <div class="chal-section">
+    <div class="section-rule"><span class="label">Industry context</span></div>
+    <h3>The honest challenges — and why a hub changes the economics</h3>
+    <div class="chal-grid">
+      <div class="chal-item"><strong>Small sorting quantities</strong><p>Individual makers can't justify sorting small batches alone. A centralised hub aggregates volume so the economics work at every scale.</p></div>
+      <div class="chal-item"><strong>Craft-heavy, time-intensive remake</strong><p><span class="arrow-o">→</span>End products are expensive, one-of-a-kind, made-to-order. The right market positioning makes this a strength.</p></div>
+      <div class="chal-item"><strong>Niche products, niche buyers</strong><p><span class="arrow-o">→</span>Story-driven product pages and before/after provenance connect unique pieces with conscious consumers seeking exactly this.</p></div>
+      <div class="chal-item"><strong>40+ collaborations, proven demand</strong><p>LSJH has worked with 40+ upcyclers and artists, generating significant coverage on MTV3 and YLE. Demand is established — scale is the next step.</p></div>
+    </div>
+  </div>
+
+  <!-- Maker list -->
+  <div class="maker-list">
+    <div class="section-rule"><span class="label">Maker network</span></div>
+    <div class="maker-list-row">
+      <div class="ml-ident"><div class="ml-av" style="background:var(--green);">MK</div><div><div class="ml-name">Meri Korhonen</div><div class="ml-loc">Helsinki</div></div></div>
+      <div class="ml-tags"><span class="tpill">Womenswear</span><span class="tpill">Denim rework</span><span class="tpill">Zero-waste</span></div>
+      <div class="ml-stat"><div class="v">320 kg</div><div class="l">upcycled</div></div>
+    </div>
+    <div class="maker-list-row">
+      <div class="ml-ident"><div class="ml-av" style="background:var(--teal);">AL</div><div><div class="ml-name">Arktinen Lab</div><div class="ml-loc">Tampere</div></div></div>
+      <div class="ml-tags"><span class="tpill">Outerwear</span><span class="tpill">Wool</span><span class="tpill">B2B capacity</span></div>
+      <div class="ml-stat"><div class="v">1.2 t</div><div class="l">upcycled</div></div>
+    </div>
+    <div class="maker-list-row">
+      <div class="ml-ident"><div class="ml-av" style="background:#5A4535;">SK</div><div><div class="ml-name">Studio Kierrätys</div><div class="ml-loc">Helsinki</div></div></div>
+      <div class="ml-tags"><span class="tpill">Home textiles</span><span class="tpill">Accessories</span></div>
+      <div class="ml-stat"><div class="v">480 kg</div><div class="l">upcycled</div></div>
+    </div>
+    <div class="maker-list-row">
+      <div class="ml-ident"><div class="ml-av" style="background:#7A3030;">PV</div><div><div class="ml-name">Pohjoinen Vaate</div><div class="ml-loc">Oulu</div></div></div>
+      <div class="ml-tags"><span class="tpill">Menswear</span><span class="tpill">Collective</span></div>
+      <div class="ml-stat"><div class="v">760 kg</div><div class="l">upcycled</div></div>
+    </div>
+    <div style="padding-top:28px;text-align:center;">
+      <button class="btn btn-ghost" onclick="toast('Maker application form loading…')">Apply to join the maker network →</button>
+    </div>
+  </div>
+
+  <footer>
+    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Supported by ARKI 135 · Helsinki · 2026</p></div>
+    <div class="f-links"><a onclick="show('home')">Overview</a><a onclick="show('materials')">Materials</a><a onclick="show('products')">Products</a><a onclick="show('partner')">Partner</a></div>
+  </footer>
+</div>
+
+<!-- ═══════════════ PRODUCTS ═══════════════ -->
+<div id="products" class="section">
+  <div class="pg-intro">
+    <div class="section-rule"><span class="label">Content-First Marketplace</span></div>
+    <h2>Just increasing supply<br>is not enough.</h2>
+    <p class="sub">We also need to increase demand. HUPcycle's marketplace leads with transformation stories — before/after provenance, maker narratives, and material origins — connecting unique, sustainable pieces with consumers actively seeking them.</p>
+  </div>
+
+  <!-- Before/after -->
+  <div class="ba-section">
+    <div class="ba-hed">Transformation stories</div>
+    <div class="ba-grid">
+      <div class="ba-item">
+        <div class="ba-visual-wrap">
+          <div class="ba-b"><img src="img/denim-bales.jpeg" alt="Before: denim bales" /></div>
+          <div class="ba-arrow-col">→</div>
+          <div class="ba-a"><img src="img/fashion-2.jpeg" alt="After: denim garment" /></div>
+        </div>
+        <div class="ba-maker">Rolf Ekroth · Encore SS26</div>
+        <div class="ba-name">Denim Dungaree Dress</div>
+        <div class="ba-desc">LSJH Seconds denim, remade into a structured piece at Copenhagen Fashion Week.</div>
+        <div class="ba-price">€210</div>
+      </div>
+      <div class="ba-item">
+        <div class="ba-visual-wrap">
+          <div class="ba-b"><img src="img/lace-seconds.jpeg" alt="Before: lace Seconds" /></div>
+          <div class="ba-arrow-col">→</div>
+          <div class="ba-a"><img src="img/fashion-4.jpeg" alt="After: lace blouse" /></div>
+        </div>
+        <div class="ba-maker">Ervin Latimer</div>
+        <div class="ba-name">Post-Consumer Linen Blouse</div>
+        <div class="ba-desc">Dead stock linen and Seconds sheeting reconstructed into structured womenswear.</div>
+        <div class="ba-price">€145</div>
+      </div>
+      <div class="ba-item">
+        <div class="ba-visual-wrap">
+          <div class="ba-b"><img src="img/warehouse-1.jpeg" alt="Before: mixed household textiles" /></div>
+          <div class="ba-arrow-col">→</div>
+          <div class="ba-a"><img src="img/fashion-3.jpeg" alt="After: tote bag" /></div>
+        </div>
+        <div class="ba-maker">Studio Kierrätys</div>
+        <div class="ba-name">Mixed Fibre Tote</div>
+        <div class="ba-desc">LSJH household textile Seconds remade into minimal canvas-weight totes.</div>
+        <div class="ba-price">€68</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Photo product grid -->
+  <div class="prod-grid-section">
+    <div class="section-rule"><span class="label">Available now</span></div>
+    <div class="prod-photo-grid">
+      <div class="prod-card" onclick="toast('Product details loading…')">
+        <div class="prod-card-img"><img src="img/fashion-1.jpeg" alt="Patterned garment" /></div>
+        <div class="prod-card-body">
+          <div class="pcm">Rolf Ekroth</div>
+          <h4>Reconstruction Jacket</h4>
+          <div class="prod-card-footer"><span class="price">€320</span><span class="eco">2.1 kg saved</span></div>
+        </div>
+      </div>
+      <div class="prod-card" onclick="toast('Product details loading…')">
+        <div class="prod-card-img"><img src="img/fashion-2.jpeg" alt="Denim dress" /></div>
+        <div class="prod-card-body">
+          <div class="pcm">Meri Korhonen</div>
+          <h4>Denim Dungaree Dress</h4>
+          <div class="prod-card-footer"><span class="price">€210</span><span class="eco">1.8 kg saved</span></div>
+        </div>
+      </div>
+      <div class="prod-card" onclick="toast('Product details loading…')">
+        <div class="prod-card-img"><img src="img/fashion-3.jpeg" alt="Tote bag" /></div>
+        <div class="prod-card-body">
+          <div class="pcm">Studio Kierrätys</div>
+          <h4>Mixed Fibre Tote</h4>
+          <div class="prod-card-footer"><span class="price">€68</span><span class="eco">0.4 kg saved</span></div>
+        </div>
+      </div>
+      <div class="prod-card" onclick="toast('Product details loading…')">
+        <div class="prod-card-img"><img src="img/fashion-4.jpeg" alt="Lace blouse" /></div>
+        <div class="prod-card-body">
+          <div class="pcm">Ervin Latimer</div>
+          <h4>Post-Consumer Linen Blouse</h4>
+          <div class="prod-card-footer"><span class="price">€145</span><span class="eco">0.8 kg saved</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+      <div class="prod-card" onclick="toast('Product details loading…')">
+        <div style="display:grid;grid-template-columns:100px 1fr;">
+          <div class="prod-card-img" style="height:90px;"><img src="img/ervin-garment.jpeg" alt="Ervin garment" /></div>
+          <div class="prod-card-body" style="padding:12px 14px;">
+            <div class="pcm">Ervin Latimer</div>
+            <h4>Post-Consumer Shirt</h4>
+            <div class="prod-card-footer"><span class="price">€185</span><span class="eco">1.1 kg saved</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card" onclick="toast('Product details loading…')">
+        <div style="display:grid;grid-template-columns:100px 1fr;">
+          <div class="prod-card-img" style="height:90px;"><img src="img/ervin-bedding.jpeg" alt="Duvet cover" /></div>
+          <div class="prod-card-body" style="padding:12px 14px;">
+            <div class="pcm">Ervin Latimer</div>
+            <h4>Poster Print Duvet Cover</h4>
+            <div class="prod-card-footer"><span class="price">€95</span><span class="eco">1.2 kg saved</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Second row of secondary products -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div class="prod-card" onclick="toast('Product details loading…')">
+        <div style="display:grid;grid-template-columns:100px 1fr;">
+          <div class="prod-card-img" style="height:90px;"><img src="img/clothes-rack-color.jpeg" alt="Curated reuse rack" /></div>
+          <div class="prod-card-body" style="padding:12px 14px;">
+            <div class="pcm">Lemppari Curation</div>
+            <h4>Reuse Rack Selection</h4>
+            <div class="prod-card-footer"><span class="price">€35–90</span><span class="eco">varies</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="prod-card" onclick="toast('Product details loading…')">
+        <div style="display:grid;grid-template-columns:100px 1fr;">
+          <div class="prod-card-img" style="height:90px;"><img src="img/ervin-model.jpeg" alt="Ervin Latimer poster print model" /></div>
+          <div class="prod-card-body" style="padding:12px 14px;">
+            <div class="pcm">Ervin Latimer</div>
+            <h4>Poster Print Series</h4>
+            <div class="prod-card-footer"><span class="price">€220</span><span class="eco">1.4 kg saved</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mkt-strip">
+    <div class="mkt-item"><div class="big">3×</div><div class="desc">Second-hand clothing market growing 3× faster than overall apparel</div></div>
+    <div class="mkt-item"><div class="big">18%</div><div class="desc">Of Lemppari store revenue from Seconds clothes 2023–25, with 34% of volume by weight</div></div>
+    <div class="mkt-item"><div class="big">Megatrend</div><div class="desc">Remake aesthetics — consumers seek interesting, unique, sustainably made clothing</div></div>
+  </div>
+
+  <footer>
+    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Supported by ARKI 135 · Helsinki · 2026</p></div>
+    <div class="f-links"><a onclick="show('home')">Overview</a><a onclick="show('materials')">Materials</a><a onclick="show('makers')">Makers</a><a onclick="show('partner')">Partner</a></div>
+  </footer>
+</div>
+
+<!-- ═══════════════ TECHNOLOGY ═══════════════ -->
+<div id="technology" class="section">
+  <div class="pg-intro">
+    <div class="section-rule"><span class="label">Technology & Infrastructure</span></div>
+    <h2>Scale requires<br>automation.</h2>
+    <p class="sub">The remake process is inherently craft-heavy. Moving from artisan-scale to industry-scale requires AI-assisted sorting, robotic manufacturing support, and digital traceability infrastructure aligned with EU EPR/ESPR requirements.</p>
+  </div>
+
+  <div class="tech-needs">
+    <div class="tn-row">
+      <div class="tn-label"><div class="n">01</div><div class="l">AI Sorting</div></div>
+      <div class="tn-body">
+        <h3>Automated fibre identification & grading</h3>
+        <p>Computer vision and spectroscopic analysis to automatically identify fibre composition and grade incoming Seconds material. Trosort's conveyor sorting system and Redivivum's Identify-Inspect-Index platform are active reference points. Estimated 60% reduction in manual sorting labour.</p>
+        <span class="tn-ref">Referenced: Trosort · Redivivum · LSJH R&amp;D programme</span>
+      </div>
+    </div>
+    <div class="tn-row">
+      <div class="tn-label"><div class="n">02</div><div class="l">Robotics</div></div>
+      <div class="tn-body">
+        <h3>Robotic support for remake manufacturing</h3>
+        <p>Semi-automated cutting, deconstruction, and fabric preparation lets skilled makers focus on design decisions while repetitive preparation is handled at machine speed — enabling batch economics without sacrificing handcrafted quality.</p>
+        <span class="tn-ref">Referenced: Losanje platform · LSJH webinar, 1 April 2026</span>
+      </div>
+    </div>
+    <div class="tn-row">
+      <div class="tn-label"><div class="n">03</div><div class="l">Traceability</div></div>
+      <div class="tn-body">
+        <h3>Digital Product Passport aligned with EU DPP</h3>
+        <p>Every upcycled product needs a traceable link to its material origin — which LSJH hub, what fibre type, which maker. This satisfies incoming EU EPR/ESPR requirements and is the cornerstone of the "Upcycled in Finland" brand proposition commanding premium pricing.</p>
+        <span class="tn-ref">Aligned with EU EPR 2026 · ESPR textile requirements</span>
+      </div>
+    </div>
+    <div class="tn-row">
+      <div class="tn-label"><div class="n">04</div><div class="l">Content AI</div></div>
+      <div class="tn-body">
+        <h3>AI-assisted product storytelling & marketing</h3>
+        <p>Each upcycled piece is unique. Scaling the content-first marketplace requires automated generation of product stories, before/after documentation, and social content — connecting each piece to its material provenance in a format that resonates with conscious consumers.</p>
+        <span class="tn-ref">Platform vision: HUPcycle tExtended webinar 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="eco-section">
+    <div class="eco-hed">Platform ecosystem & revenue model</div>
+    <div class="eco-flow">
+      <div class="eco-node"><div class="nl">Layer 1</div><h4>Material Suppliers</h4><ul><li>LSJH nationwide collection</li><li>Brands &amp; manufacturers</li><li>Sell surplus · subscription</li></ul></div>
+      <div class="eco-node"><div class="nl">Layer 2</div><h4>Processing & Mfg</h4><ul><li>AI sorting · robotics</li><li>Scalable production</li><li>Pay-per-use / subscription</li></ul></div>
+      <div class="eco-node"><div class="nl">Layer 3</div><h4>Creators & Designers</h4><ul><li>Independent makers, SMEs</li><li>Design, create, sell</li><li>Commission on sales</li></ul></div>
+      <div class="eco-node"><div class="nl">Layer 4</div><h4>Conscious Consumers</h4><ul><li>Buy upcycled products</li><li>Purchase &amp; resell</li><li>Growing 3× faster</li></ul></div>
+    </div>
+    <div class="rev-row">
+      <div class="rev-item"><div class="rl">Stream 1</div><div class="rn">Subscription fees</div><div class="rd">Material access &amp; platform</div></div>
+      <div class="rev-item"><div class="rl">Stream 2</div><div class="rn">Marketplace commission</div><div class="rd">% of each product sold</div></div>
+      <div class="rev-item"><div class="rl">Stream 3</div><div class="rn">Workshops &amp; events</div><div class="rd">Training, community</div></div>
+      <div class="rev-item"><div class="rl">Stream 4</div><div class="rn">Upcycling agency</div><div class="rd">B2B brand partnerships</div></div>
+    </div>
+  </div>
+
+  <footer>
+    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Supported by ARKI 135 · Helsinki · 2026</p></div>
+    <div class="f-links"><a onclick="show('home')">Overview</a><a onclick="show('materials')">Materials</a><a onclick="show('makers')">Makers</a><a onclick="show('partner')">Partner</a></div>
+  </footer>
+</div>
+
+<!-- ═══════════════ PARTNER ═══════════════ -->
+<div id="partner" class="section">
+
+  <div class="partner-hero">
+    <div class="ph-left">
+      <div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:24px;">Strategic partnership</div>
+        <h2>Join the circular<br>textile movement.</h2>
+        <p>HUPcycle is seeking strategic partners and financial investors to expand initiatives and accelerate the scaling of circular textile solutions in Finland and across Europe. EU regulation is creating mandatory demand — the timing is now.</p>
+      </div>
+      <div class="ph-contact">
+        <div class="cn">Miira Ojanen</div>
+        <div class="ce">Project specialist · LSJH / HUPcycle</div>
+        <div class="ce" style="margin-top:4px;">miir4ojanen@gmail.com</div>
+      </div>
+    </div>
+    <div class="ph-right">
+      <h3>The market case</h3>
+      <div class="mkt-row"><div class="val">€2,000–10,000/tn</div><div class="desc">Remake feedstock value — vs. €10–600/tn for standard recycling streams</div></div>
+      <div class="mkt-row"><div class="val">30–40%</div><div class="desc">Of collected Finnish textiles are Seconds — currently underserved and undermonetised</div></div>
+      <div class="mkt-row"><div class="val">3×</div><div class="desc">Second-hand market growth rate vs. overall apparel. EPR legislation accelerates further.</div></div>
+      <div class="mkt-row"><div class="val">2026</div><div class="desc">EU EPR active. No incineration for dead stock. Brands urgently need circular solutions.</div></div>
+    </div>
+  </div>
+
+  <!-- Warehouse photo strip -->
+  <div class="ph-warehouse">
+    <img src="img/warehouse-2.jpeg" alt="LSJH textile sorting facility" />
+    <div class="ph-warehouse-overlay"></div>
+    <div class="ph-warehouse-content">
+      <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:12px;">LSJH Sorting Facility · Finland</div>
+      <div style="font-family:Georgia,serif;font-size:32px;color:white;line-height:1.15;max-width:560px;">"The same stream that supplied Rolf Ekroth's Copenhagen Fashion Week collection."</div>
+      <div style="font-size:13px;color:rgba(255,255,255,.5);margin-top:14px;">Miira Ojanen, tExtended webinar, April 2026</div>
+    </div>
+  </div>
+
+  <div class="pt-grid">
+    <div class="pt-col"><div class="pt-label">Type A</div><h3>Industry Partner</h3><p>Waste managers, textile brands, logistics, and technology providers. LSJH's nationwide collection network is the founding model — other regional operators across Finland and the Nordics are actively sought.</p></div>
+    <div class="pt-col"><div class="pt-label">Type B</div><h3>Financial Investor</h3><p>Impact investors and funds seeking measurable environmental returns alongside commercial growth. HUPcycle targets Finland's first-mover position in a rapidly growing EU market where EPR legislation creates structural demand.</p></div>
+    <div class="pt-col"><div class="pt-label">Type C</div><h3>Technology Partner</h3><p>AI sorting, robotics, and digital traceability companies co-developing solutions at ARKI 135 Innovation Lab. The bottleneck from artisan to industry-scale is automation — technology investment has the highest leverage here.</p></div>
+  </div>
+
+  <div class="form-section">
+    <div class="section-rule"><span class="label">Express interest</span></div>
+    <h3>Get in touch</h3>
+    <p class="form-sub">Tell us about your organisation and how you'd like to collaborate. We respond within two working days.</p>
+    <div class="frow">
+      <div class="ffield"><label>Name</label><input type="text" placeholder="Your full name" /></div>
+      <div class="ffield"><label>Organisation</label><input type="text" placeholder="Company or institution" /></div>
+    </div>
+    <div class="frow">
+      <div class="ffield"><label>Email</label><input type="email" placeholder="your@email.com" /></div>
+      <div class="ffield"><label>Partnership type</label>
+        <select><option value="">Select…</option><option>Industry partner</option><option>Financial investor</option><option>Technology partner</option><option>Maker / designer</option><option>Other</option></select>
+      </div>
+    </div>
+    <div class="frow">
+      <div class="ffield frow-full"><label>Message</label><textarea placeholder="Describe your interest, your organisation, and how you see the collaboration working…"></textarea></div>
+    </div>
+    <div style="margin-top:8px;">
+      <button class="btn btn-primary" style="font-size:14px;padding:12px 28px;" onclick="toast('Expression of interest sent. Miira will be in touch shortly.')">Send expression of interest</button>
+    </div>
+  </div>
+
+  <footer>
+    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Supported by ARKI 135 · Helsinki · 2026</p></div>
+    <div class="f-links"><a onclick="show('home')">Overview</a><a onclick="show('materials')">Materials</a><a onclick="show('makers')">Makers</a><a onclick="show('products')">Products</a></div>
+  </footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  function show(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    const el = document.getElementById(id);
+    if (el) el.classList.add('active');
+    const nav = document.getElementById('nav-' + id);
+    if (nav) nav.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  function toggleMenu() {
+    const ham = document.getElementById('ham');
+    const mn = document.getElementById('mobileNav');
+    ham.classList.toggle('open');
+    mn.classList.toggle('open');
+    document.body.style.overflow = mn.classList.contains('open') ? 'hidden' : '';
+  }
+
+  function closeMenu() {
+    document.getElementById('ham').classList.remove('open');
+    document.getElementById('mobileNav').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  function switchTab(btn, tabId) {
+    btn.closest('.creator-workspace').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.closest('.creator-workspace').querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  // Arrow keys between sections
+  const SECTIONS = ['home','materials','makers','products','technology','partner'];
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    const cur = SECTIONS.findIndex(s => document.getElementById(s).classList.contains('active'));
+    if (e.key === 'ArrowRight' && cur < SECTIONS.length - 1) show(SECTIONS[cur + 1]);
+    if (e.key === 'ArrowLeft'  && cur > 0)                   show(SECTIONS[cur - 1]);
+  });
+</script>
+</body>
+</html>
