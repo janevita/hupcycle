@@ -578,6 +578,7 @@
       .rev-row { flex-wrap: wrap; }
 
       .pt-grid { grid-template-columns: 1fr; }
+      .pt-grid .pt-col[style*="grid-column"] > div { grid-template-columns: 1fr; gap: 32px; }
       .frow { grid-template-columns: 1fr; }
 
       .ph-warehouse { min-height: 220px; }
@@ -633,7 +634,7 @@
       <div>
         <div class="hero-eyebrow">Finland's National Textile Upcycling Hub · Helsinki · 2026</div>
         <h1 class="hero-h1">From waste<br>to <em>wearable</em><br>stories</h1>
-        <p class="hero-body">HUPcycle builds the infrastructure, market, and maker ecosystem to turn Finland's most overlooked textile stream — Seconds — into a competitive and creative industry.</p>
+        <p class="hero-body">HUPcycle builds the infrastructure, market, and maker ecosystem to turn Finland's most overlooked textile stream — Seconds — into a competitive and creative industry. A platform that lets conscious consumers participate in the movement — not just buy into it.</p>
         <div class="hero-actions">
           <button class="btn btn-primary" onclick="show('materials')">Explore materials</button>
           <button class="btn btn-ghost" onclick="show('partner')">Become a partner</button>
@@ -647,7 +648,7 @@
     </div>
 
     <div class="hero-right">
-      <img src="denim-bales.jpeg" alt="Denim bales at LSJH sorting facility" />
+      <img src="img/denim-bales.jpeg" alt="Denim bales at LSJH sorting facility" />
       <div class="hero-right-overlay"></div>
       <div class="hero-right-content">
         <div class="stream-hed">The post-consumer textile stream</div>
@@ -691,6 +692,11 @@
       <div><h3>AI Sorting & Scale Infrastructure</h3><p>AI-assisted fibre identification, robotic sorting, and digital product passports aligned with EU EPR/ESPR requirements entering force in 2026.</p></div>
       <div class="plat-arrow">→</div>
     </div>
+    <div class="plat-row" onclick="show('makers')">
+      <div class="plat-num">05 — Community</div>
+      <div><h3>DIY, Repair & Creator Knowledge</h3><p>Creators share techniques, repair guides, and upcycling know-how with the community. Sustainability impact metrics — kg diverted, water saved, CO₂ avoided — make every maker's contribution visible and legible.</p></div>
+      <div class="plat-arrow">→</div>
+    </div>
   </div>
 
   <!-- Community strip -->
@@ -715,15 +721,15 @@
       </div>
     </div>
     <div class="cs-photos">
-      <div class="cs-photo"><img src="workshop.jpeg" alt="HUPcycle upcycling workshop" /></div>
-      <div class="cs-photo"><img src="fashion-1.jpeg" alt="Upcycled fashion output" /></div>
-      <div class="cs-photo"><img src="fashion-2.jpeg" alt="Remake garment" /></div>
-      <div class="cs-photo"><img src="lace-seconds.jpeg" alt="Seconds textile material" /></div>
+      <div class="cs-photo"><img src="img/workshop.jpeg" alt="HUPcycle upcycling workshop" /></div>
+      <div class="cs-photo"><img src="img/fashion-1.jpeg" alt="Upcycled fashion output" /></div>
+      <div class="cs-photo"><img src="img/fashion-2.jpeg" alt="Remake garment" /></div>
+      <div class="cs-photo"><img src="img/lace-seconds.jpeg" alt="Seconds textile material" /></div>
     </div>
   </div>
 
   <footer>
-    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Supported by ARKI 135 · Helsinki · 2026</p></div>
+    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Built at ARKI 135 Circular Hub · Helsinki · 2026</p></div>
     <div class="f-links"><a onclick="show('materials')">Materials</a><a onclick="show('makers')">Makers</a><a onclick="show('products')">Products</a><a onclick="show('partner')">Partner</a></div>
   </footer>
 </div>
@@ -743,12 +749,12 @@
         <div class="pct-big">10–15%</div>
         <h3>Reuse</h3>
         <div style="margin:14px 0 16px;height:140px;overflow:hidden;border-radius:var(--r);">
-          <img src="reuse-dress.jpeg" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;" alt="Reuse-grade garments" />
+          <img src="img/reuse-dress.jpeg" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block;" alt="Reuse-grade garments" />
         </div>
         <p>Good-condition clothing resold as-is via Lemppari store. High value per unit, limited volume.</p>
       </div>
       <div class="tier-col featured">
-        <img src="lace-seconds.jpeg" alt="Seconds lace textile material" class="tier-photo" />
+        <img src="img/lace-seconds.jpeg" alt="Seconds lace textile material" class="tier-photo" />
         <div class="tier-featured-overlay">
           <span class="tier-tag-pill" style="background:rgba(255,255,255,.22);color:white;">Tier B — HUPcycle focus</span>
           <div style="font-family:Georgia,serif;font-size:52px;color:white;line-height:1;margin-bottom:8px;">30–40%</div>
@@ -789,7 +795,7 @@
         <tr>
           <td>
             <div class="m-cell-inner">
-              <div class="mat-thumb"><img src="denim-bales.jpeg" alt="Denim" /></div>
+              <div class="mat-thumb"><img src="img/denim-bales.jpeg" alt="Denim" /></div>
               <div><div class="m-name-cell">Denim Deadstock</div><div class="m-source">LSJH Turku Hub</div></div>
             </div>
           </td>
@@ -802,7 +808,7 @@
         <tr>
           <td>
             <div class="m-cell-inner">
-              <div class="mat-thumb"><img src="lace-seconds.jpeg" alt="Lace" /></div>
+              <div class="mat-thumb"><img src="img/lace-seconds.jpeg" alt="Lace" /></div>
               <div><div class="m-name-cell">Mixed Cotton Blend</div><div class="m-source">LSJH Helsinki Hub</div></div>
             </div>
           </td>
@@ -815,7 +821,7 @@
         <tr>
           <td>
             <div class="m-cell-inner">
-              <div class="mat-thumb"><img src="ervin-garment.jpeg" alt="Wool" /></div>
+              <div class="mat-thumb"><img src="img/ervin-garment.jpeg" alt="Wool" /></div>
               <div><div class="m-name-cell">Merino Wool Off-cuts</div><div class="m-source">Tampere Textile Factory</div></div>
             </div>
           </td>
@@ -828,7 +834,7 @@
         <tr>
           <td>
             <div class="m-cell-inner">
-              <div class="mat-thumb"><img src="warehouse-1.jpeg" alt="Mixed textiles" /></div>
+              <div class="mat-thumb"><img src="img/warehouse-1.jpeg" alt="Mixed textiles" /></div>
               <div><div class="m-name-cell">Mixed Household Textiles</div><div class="m-source">ARKI 135 Lab</div></div>
             </div>
           </td>
@@ -841,7 +847,7 @@
         <tr>
           <td>
             <div class="m-cell-inner">
-              <div class="mat-thumb"><img src="clothes-rack.jpeg" alt="Linen surplus" /></div>
+              <div class="mat-thumb"><img src="img/clothes-rack.jpeg" alt="Linen surplus" /></div>
               <div><div class="m-name-cell">Linen Surplus</div><div class="m-source">Espoo Collection Point</div></div>
             </div>
           </td>
@@ -856,7 +862,7 @@
   </div>
 
   <footer>
-    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Supported by ARKI 135 · Helsinki · 2026</p></div>
+    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Built at ARKI 135 Circular Hub · Helsinki · 2026</p></div>
     <div class="f-links"><a onclick="show('home')">Overview</a><a onclick="show('makers')">Makers</a><a onclick="show('products')">Products</a><a onclick="show('partner')">Partner</a></div>
   </footer>
 </div>
@@ -884,7 +890,7 @@
 
   <div class="collab-feature">
     <div class="collab-visual">
-      <img src="rolf-runway-grid.jpeg" alt="Rolf Ekroth Encore SS26 — Vogue Scandinavia" />
+      <img src="img/rolf-runway-grid.jpeg" alt="Rolf Ekroth Encore SS26 — Vogue Scandinavia" />
       <div class="cv-overlay"></div>
       <div class="cv-content">
         <div class="cv-runline">Copenhagen Fashion Week · August 2025</div>
@@ -914,7 +920,7 @@
       <button class="btn btn-ghost" style="align-self:flex-start;" onclick="show('products')">View in marketplace →</button>
     </div>
     <div class="collab-visual">
-      <img src="ervin-portrait.jpeg" alt="Ervin Latimer" />
+      <img src="img/ervin-portrait.jpeg" alt="Ervin Latimer" />
       <div class="cv-overlay" style="background:linear-gradient(to top,rgba(42,31,24,.88) 0%,rgba(42,31,24,.2) 70%)"></div>
       <div class="cv-content">
         <div class="cv-runline">Helsinki · 2024–2026</div>
@@ -930,15 +936,20 @@
     <div class="creator-dashboard">
       <!-- Profile card -->
       <div class="creator-card">
-        <div class="creator-card-cover"><img src="rolf-runway-grid.jpeg" alt="cover" /></div>
+        <div class="creator-card-cover"><img src="img/rolf-runway-grid.jpeg" alt="cover" /></div>
         <div class="creator-card-body">
           <div class="creator-av"><div class="av-text">MK</div></div>
           <h4>Meri Korhonen</h4>
           <div class="ch">@meri.upcycles · Helsinki</div>
           <div class="creator-stats">
-            <div class="c-stat"><div class="v">320 kg</div><div class="l">Upcycled</div></div>
+            <div class="c-stat"><div class="v">320 kg</div><div class="l">Diverted</div></div>
+            <div class="c-stat"><div class="v">4,800 L</div><div class="l">Water saved</div></div>
+            <div class="c-stat"><div class="v">192 kg</div><div class="l">CO₂ avoided</div></div>
+          </div>
+          <div class="creator-stats" style="margin-top:8px;">
             <div class="c-stat"><div class="v">48</div><div class="l">Products</div></div>
             <div class="c-stat"><div class="v">4.9★</div><div class="l">Rating</div></div>
+            <div class="c-stat"><div class="v">12</div><div class="l">DIY guides</div></div>
           </div>
           <div class="creator-tags">
             <span class="ctag">Womenswear</span>
@@ -946,7 +957,7 @@
             <span class="ctag">Zero-waste</span>
             <span class="ctag">Slow fashion</span>
           </div>
-          <div style="background:var(--green-pale);border-radius:2px;padding:10px 12px;font-size:13px;color:var(--green);margin-bottom:14px;">320 kg textile waste diverted from landfill</div>
+          <div style="background:var(--green-pale);border-radius:2px;padding:10px 12px;font-size:13px;color:var(--green);margin-bottom:14px;">320 kg diverted · 4,800 L water saved · 192 kg CO₂ avoided</div>
           <button class="btn btn-primary" style="width:100%;justify-content:center;" onclick="toast('Following Meri Korhonen!')">Follow creator</button>
         </div>
       </div>
@@ -957,25 +968,26 @@
           <button class="tab-btn active" onclick="switchTab(this,'tab-materials')">Materials available</button>
           <button class="tab-btn" onclick="switchTab(this,'tab-designs')">My designs</button>
           <button class="tab-btn" onclick="switchTab(this,'tab-collabs')">Collaborations</button>
+          <button class="tab-btn" onclick="switchTab(this,'tab-diy')">DIY & Repair</button>
         </div>
 
         <div id="tab-materials" class="tab-content active">
           <div style="font-size:13px;color:var(--ink-mid);margin-bottom:20px;">Seconds feedstock matched to your practice — Cotton, Denim, Mixed fibres.</div>
           <div class="mat-grid">
             <div class="mat-item">
-              <div class="mat-item-img"><img src="denim-bales.jpeg" alt="Denim" /></div>
+              <div class="mat-item-img"><img src="img/denim-bales.jpeg" alt="Denim" /></div>
               <div class="mat-item-body"><h5>Denim Deadstock</h5><div class="kg">1,200 kg available</div><div class="src">LSJH Turku</div></div>
             </div>
             <div class="mat-item">
-              <div class="mat-item-img"><img src="lace-seconds.jpeg" alt="Cotton blend" /></div>
+              <div class="mat-item-img"><img src="img/lace-seconds.jpeg" alt="Cotton blend" /></div>
               <div class="mat-item-body"><h5>Cotton Blend Mix</h5><div class="kg">840 kg available</div><div class="src">LSJH Helsinki</div></div>
             </div>
             <div class="mat-item">
-              <div class="mat-item-img"><img src="warehouse-1.jpeg" alt="Mixed household" /></div>
+              <div class="mat-item-img"><img src="img/warehouse-1.jpeg" alt="Mixed household" /></div>
               <div class="mat-item-body"><h5>Household Textiles</h5><div class="kg">560 kg available</div><div class="src">ARKI 135</div></div>
             </div>
             <div class="mat-item">
-              <div class="mat-item-img"><img src="clothes-rack-color.jpeg" alt="Mixed colour" /></div>
+              <div class="mat-item-img"><img src="img/clothes-rack-color.jpeg" alt="Mixed colour" /></div>
               <div class="mat-item-body"><h5>Mixed Seconds</h5><div class="kg">280 kg available</div><div class="src">LSJH Oulu</div></div>
             </div>
           </div>
@@ -985,19 +997,19 @@
           <div style="font-size:13px;color:var(--ink-mid);margin-bottom:20px;">Published designs — from your Seconds material sources.</div>
           <div class="designs-grid">
             <div class="design-item">
-              <div class="design-img"><img src="fashion-2.jpeg" alt="Denim dress" /></div>
+              <div class="design-img"><img src="img/fashion-2.jpeg" alt="Denim dress" /></div>
               <div class="design-body"><div class="dm">Rolf Ekroth · Encore SS26</div><h5>Denim Dungaree Dress</h5><div class="dp">€210</div></div>
             </div>
             <div class="design-item">
-              <div class="design-img"><img src="fashion-1.jpeg" alt="Patterned piece" /></div>
+              <div class="design-img"><img src="img/fashion-1.jpeg" alt="Patterned piece" /></div>
               <div class="design-body"><div class="dm">Meri Korhonen</div><h5>Patchwork Jacket</h5><div class="dp">€145</div></div>
             </div>
             <div class="design-item">
-              <div class="design-img"><img src="fashion-3.jpeg" alt="Tote bag" /></div>
+              <div class="design-img"><img src="img/fashion-3.jpeg" alt="Tote bag" /></div>
               <div class="design-body"><div class="dm">Studio Kierrätys</div><h5>Mixed Fibre Tote</h5><div class="dp">€68</div></div>
             </div>
             <div class="design-item">
-              <div class="design-img"><img src="fashion-4.jpeg" alt="White dress" /></div>
+              <div class="design-img"><img src="img/fashion-4.jpeg" alt="White dress" /></div>
               <div class="design-body"><div class="dm">Ervin Latimer</div><h5>Linen Blouse</h5><div class="dp">€145</div></div>
             </div>
           </div>
@@ -1021,6 +1033,55 @@
               <div style="font-size:14px;color:var(--ink-mid);">Innovation Lab access · Workshop space · Helsinki</div>
               <span class="avail-p">Active</span>
             </div>
+          </div>
+        </div>
+
+        <div id="tab-diy" class="tab-content">
+          <div style="font-size:13px;color:var(--ink-mid);margin-bottom:20px;">Techniques and repair guides shared by HUPcycle creators — free, practical, community-sourced.</div>
+          <div style="display:flex;flex-direction:column;gap:0;">
+            <div style="padding:20px 0;border-bottom:1px solid var(--sand);">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
+                <div>
+                  <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:6px;">Denim · Beginner</div>
+                  <div style="font-family:Georgia,serif;font-size:17px;margin-bottom:5px;">Visible mending: denim patch technique</div>
+                  <div style="font-size:13px;color:var(--ink-mid);line-height:1.55;">How to apply contrast fabric patches to worn denim knees and seat — creating texture rather than hiding wear. By Meri Korhonen.</div>
+                </div>
+                <button class="btn btn-ghost" style="flex-shrink:0;font-size:12px;padding:7px 14px;" onclick="toast('Guide opening…')">Read guide →</button>
+              </div>
+            </div>
+            <div style="padding:20px 0;border-bottom:1px solid var(--sand);">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
+                <div>
+                  <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:6px;">Mixed fibres · Intermediate</div>
+                  <div style="font-family:Georgia,serif;font-size:17px;margin-bottom:5px;">Deconstruction-first: how to take garments apart cleanly</div>
+                  <div style="font-size:13px;color:var(--ink-mid);line-height:1.55;">Unpicking seams without damaging fabric — the first step before any remake project. Works on most woven garments. By Studio Kierrätys.</div>
+                </div>
+                <button class="btn btn-ghost" style="flex-shrink:0;font-size:12px;padding:7px 14px;" onclick="toast('Guide opening…')">Read guide →</button>
+              </div>
+            </div>
+            <div style="padding:20px 0;border-bottom:1px solid var(--sand);">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
+                <div>
+                  <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:6px;">Wool · Intermediate</div>
+                  <div style="font-family:Georgia,serif;font-size:17px;margin-bottom:5px;">Felting Seconds wool into home textile panels</div>
+                  <div style="font-size:13px;color:var(--ink-mid);line-height:1.55;">Wet felting mixed wool Seconds into durable flat panels suitable for cushion covers, wall hangings, and table runners. By Arktinen Lab.</div>
+                </div>
+                <button class="btn btn-ghost" style="flex-shrink:0;font-size:12px;padding:7px 14px;" onclick="toast('Guide opening…')">Read guide →</button>
+              </div>
+            </div>
+            <div style="padding:20px 0;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;">
+                <div>
+                  <div style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);margin-bottom:6px;">General · All levels</div>
+                  <div style="font-family:Georgia,serif;font-size:17px;margin-bottom:5px;">Fibre identification without a lab</div>
+                  <div style="font-size:13px;color:var(--ink-mid);line-height:1.55;">Burn tests, hand-feel, and stretch behaviour to distinguish cotton, wool, polyester, and linen blends from a Seconds bundle. By Ervin Latimer.</div>
+                </div>
+                <button class="btn btn-ghost" style="flex-shrink:0;font-size:12px;padding:7px 14px;" onclick="toast('Guide opening…')">Read guide →</button>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--sand);">
+            <button class="btn btn-ghost" onclick="toast('Submitting your guide…')">Share your technique with the community →</button>
           </div>
         </div>
       </div>
@@ -1068,7 +1129,7 @@
   </div>
 
   <footer>
-    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Supported by ARKI 135 · Helsinki · 2026</p></div>
+    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Built at ARKI 135 Circular Hub · Helsinki · 2026</p></div>
     <div class="f-links"><a onclick="show('home')">Overview</a><a onclick="show('materials')">Materials</a><a onclick="show('products')">Products</a><a onclick="show('partner')">Partner</a></div>
   </footer>
 </div>
@@ -1087,9 +1148,9 @@
     <div class="ba-grid">
       <div class="ba-item">
         <div class="ba-visual-wrap">
-          <div class="ba-b"><img src="denim-bales.jpeg" alt="Before: denim bales" /></div>
+          <div class="ba-b"><img src="img/denim-bales.jpeg" alt="Before: denim bales" /></div>
           <div class="ba-arrow-col">→</div>
-          <div class="ba-a"><img src="fashion-2.jpeg" alt="After: denim garment" /></div>
+          <div class="ba-a"><img src="img/fashion-2.jpeg" alt="After: denim garment" /></div>
         </div>
         <div class="ba-maker">Rolf Ekroth · Encore SS26</div>
         <div class="ba-name">Denim Dungaree Dress</div>
@@ -1098,9 +1159,9 @@
       </div>
       <div class="ba-item">
         <div class="ba-visual-wrap">
-          <div class="ba-b"><img src="lace-seconds.jpeg" alt="Before: lace Seconds" /></div>
+          <div class="ba-b"><img src="img/lace-seconds.jpeg" alt="Before: lace Seconds" /></div>
           <div class="ba-arrow-col">→</div>
-          <div class="ba-a"><img src="fashion-4.jpeg" alt="After: lace blouse" /></div>
+          <div class="ba-a"><img src="img/fashion-4.jpeg" alt="After: lace blouse" /></div>
         </div>
         <div class="ba-maker">Ervin Latimer</div>
         <div class="ba-name">Post-Consumer Linen Blouse</div>
@@ -1109,9 +1170,9 @@
       </div>
       <div class="ba-item">
         <div class="ba-visual-wrap">
-          <div class="ba-b"><img src="warehouse-1.jpeg" alt="Before: mixed household textiles" /></div>
+          <div class="ba-b"><img src="img/warehouse-1.jpeg" alt="Before: mixed household textiles" /></div>
           <div class="ba-arrow-col">→</div>
-          <div class="ba-a"><img src="fashion-3.jpeg" alt="After: tote bag" /></div>
+          <div class="ba-a"><img src="img/fashion-3.jpeg" alt="After: tote bag" /></div>
         </div>
         <div class="ba-maker">Studio Kierrätys</div>
         <div class="ba-name">Mixed Fibre Tote</div>
@@ -1126,7 +1187,7 @@
     <div class="section-rule"><span class="label">Available now</span></div>
     <div class="prod-photo-grid">
       <div class="prod-card" onclick="toast('Product details loading…')">
-        <div class="prod-card-img"><img src="fashion-1.jpeg" alt="Patterned garment" /></div>
+        <div class="prod-card-img"><img src="img/fashion-1.jpeg" alt="Patterned garment" /></div>
         <div class="prod-card-body">
           <div class="pcm">Rolf Ekroth</div>
           <h4>Reconstruction Jacket</h4>
@@ -1134,7 +1195,7 @@
         </div>
       </div>
       <div class="prod-card" onclick="toast('Product details loading…')">
-        <div class="prod-card-img"><img src="fashion-2.jpeg" alt="Denim dress" /></div>
+        <div class="prod-card-img"><img src="img/fashion-2.jpeg" alt="Denim dress" /></div>
         <div class="prod-card-body">
           <div class="pcm">Meri Korhonen</div>
           <h4>Denim Dungaree Dress</h4>
@@ -1142,7 +1203,7 @@
         </div>
       </div>
       <div class="prod-card" onclick="toast('Product details loading…')">
-        <div class="prod-card-img"><img src="fashion-3.jpeg" alt="Tote bag" /></div>
+        <div class="prod-card-img"><img src="img/fashion-3.jpeg" alt="Tote bag" /></div>
         <div class="prod-card-body">
           <div class="pcm">Studio Kierrätys</div>
           <h4>Mixed Fibre Tote</h4>
@@ -1150,7 +1211,7 @@
         </div>
       </div>
       <div class="prod-card" onclick="toast('Product details loading…')">
-        <div class="prod-card-img"><img src="fashion-4.jpeg" alt="Lace blouse" /></div>
+        <div class="prod-card-img"><img src="img/fashion-4.jpeg" alt="Lace blouse" /></div>
         <div class="prod-card-body">
           <div class="pcm">Ervin Latimer</div>
           <h4>Post-Consumer Linen Blouse</h4>
@@ -1161,7 +1222,7 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
       <div class="prod-card" onclick="toast('Product details loading…')">
         <div style="display:grid;grid-template-columns:100px 1fr;">
-          <div class="prod-card-img" style="height:90px;"><img src="ervin-garment.jpeg" alt="Ervin garment" /></div>
+          <div class="prod-card-img" style="height:90px;"><img src="img/ervin-garment.jpeg" alt="Ervin garment" /></div>
           <div class="prod-card-body" style="padding:12px 14px;">
             <div class="pcm">Ervin Latimer</div>
             <h4>Post-Consumer Shirt</h4>
@@ -1171,7 +1232,7 @@
       </div>
       <div class="prod-card" onclick="toast('Product details loading…')">
         <div style="display:grid;grid-template-columns:100px 1fr;">
-          <div class="prod-card-img" style="height:90px;"><img src="ervin-bedding.jpeg" alt="Duvet cover" /></div>
+          <div class="prod-card-img" style="height:90px;"><img src="img/ervin-bedding.jpeg" alt="Duvet cover" /></div>
           <div class="prod-card-body" style="padding:12px 14px;">
             <div class="pcm">Ervin Latimer</div>
             <h4>Poster Print Duvet Cover</h4>
@@ -1184,7 +1245,7 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
       <div class="prod-card" onclick="toast('Product details loading…')">
         <div style="display:grid;grid-template-columns:100px 1fr;">
-          <div class="prod-card-img" style="height:90px;"><img src="clothes-rack-color.jpeg" alt="Curated reuse rack" /></div>
+          <div class="prod-card-img" style="height:90px;"><img src="img/clothes-rack-color.jpeg" alt="Curated reuse rack" /></div>
           <div class="prod-card-body" style="padding:12px 14px;">
             <div class="pcm">Lemppari Curation</div>
             <h4>Reuse Rack Selection</h4>
@@ -1194,7 +1255,7 @@
       </div>
       <div class="prod-card" onclick="toast('Product details loading…')">
         <div style="display:grid;grid-template-columns:100px 1fr;">
-          <div class="prod-card-img" style="height:90px;"><img src="ervin-model.jpeg" alt="Ervin Latimer poster print model" /></div>
+          <div class="prod-card-img" style="height:90px;"><img src="img/ervin-model.jpeg" alt="Ervin Latimer poster print model" /></div>
           <div class="prod-card-body" style="padding:12px 14px;">
             <div class="pcm">Ervin Latimer</div>
             <h4>Poster Print Series</h4>
@@ -1212,7 +1273,7 @@
   </div>
 
   <footer>
-    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Supported by ARKI 135 · Helsinki · 2026</p></div>
+    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Built at ARKI 135 Circular Hub · Helsinki · 2026</p></div>
     <div class="f-links"><a onclick="show('home')">Overview</a><a onclick="show('materials')">Materials</a><a onclick="show('makers')">Makers</a><a onclick="show('partner')">Partner</a></div>
   </footer>
 </div>
@@ -1277,7 +1338,7 @@
   </div>
 
   <footer>
-    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Supported by ARKI 135 · Helsinki · 2026</p></div>
+    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Built at ARKI 135 Circular Hub · Helsinki · 2026</p></div>
     <div class="f-links"><a onclick="show('home')">Overview</a><a onclick="show('materials')">Materials</a><a onclick="show('makers')">Makers</a><a onclick="show('partner')">Partner</a></div>
   </footer>
 </div>
@@ -1309,7 +1370,7 @@
 
   <!-- Warehouse photo strip -->
   <div class="ph-warehouse">
-    <img src="warehouse-2.jpeg" alt="LSJH textile sorting facility" />
+    <img src="img/warehouse-2.jpeg" alt="LSJH textile sorting facility" />
     <div class="ph-warehouse-overlay"></div>
     <div class="ph-warehouse-content">
       <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:12px;">LSJH Sorting Facility · Finland</div>
@@ -1322,6 +1383,21 @@
     <div class="pt-col"><div class="pt-label">Type A</div><h3>Industry Partner</h3><p>Waste managers, textile brands, logistics, and technology providers. LSJH's nationwide collection network is the founding model — other regional operators across Finland and the Nordics are actively sought.</p></div>
     <div class="pt-col"><div class="pt-label">Type B</div><h3>Financial Investor</h3><p>Impact investors and funds seeking measurable environmental returns alongside commercial growth. HUPcycle targets Finland's first-mover position in a rapidly growing EU market where EPR legislation creates structural demand.</p></div>
     <div class="pt-col"><div class="pt-label">Type C</div><h3>Technology Partner</h3><p>AI sorting, robotics, and digital traceability companies co-developing solutions at ARKI 135 Innovation Lab. The bottleneck from artisan to industry-scale is automation — technology investment has the highest leverage here.</p></div>
+    <div class="pt-col" style="grid-column:1/-1;background:var(--bg-warm);">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;">
+        <div>
+          <div class="pt-label">Origin</div>
+          <h3>Built at ARKI 135 Circular Hub</h3>
+          <p>The HUPcycle MVP was conceived and built during the Value Co-creation Lab at ARKI 135 — Helsinki's circular economy innovation hub. The interactive mobile platform connecting upcycle creators with conscious consumers is the direct result of that sprint: curated shop, creator impact profiles, and the DIY knowledge library all emerged from that process.</p>
+        </div>
+        <div>
+          <div class="pt-label">Geographic vision</div>
+          <h3>Finland first. West Africa next.</h3>
+          <p>HUPcycle's model is designed to travel. West Africa faces a severe imported used-clothing crisis — millions of tonnes of fast fashion end up in Kantamanto Market in Accra and equivalent hubs across the continent, creating one of the world's most acute textile waste problems. The infrastructure, marketplace, and creator model developed in Finland directly applies to those contexts. HUPcycle is actively exploring partnerships with circular fashion organisations working in West Africa.</p>
+          <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--sand);font-size:13px;color:var(--ink-mid);">Interested in the West Africa expansion? <button class="tlink" onclick="show('partner');document.querySelector('.form-section').scrollIntoView({behavior:'smooth'})">Get in touch →</button></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="form-section">
@@ -1347,7 +1423,7 @@
   </div>
 
   <footer>
-    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Supported by ARKI 135 · Helsinki · 2026</p></div>
+    <div><div class="f-brand">HUPcycle</div><p>Finland's first national hub for textile upcycling.<br>Built at ARKI 135 Circular Hub · Helsinki · 2026</p></div>
     <div class="f-links"><a onclick="show('home')">Overview</a><a onclick="show('materials')">Materials</a><a onclick="show('makers')">Makers</a><a onclick="show('products')">Products</a></div>
   </footer>
 </div>
